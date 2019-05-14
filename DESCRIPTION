@@ -1,0 +1,21 @@
+Package: RPESE
+Type: Package
+Title: Risk/Performance Measure Estimator Standard Error
+Version: 0.1.0
+Authors@R: c(
+    person("Xin", "Chen", email = "chenx26@uw.edu", role = c("aut", "cre")),
+    person("Anthony-Alexander", "Christidis", email = "anthony.christidis@stat.ubc.ca", role = c("aut")))
+Description: This package contains functions to compute the standard error of
+    popular risk/performance measures using different methods.
+License: GPL-3
+LazyData: TRUE
+Imports:
+    sandwich,
+    IFs,
+    PerformanceAnalytics
+Suggests:
+    testthat, R.rsp
+Depends:
+    xts, zoo, robustbase, boot, h2o, glmGammaNet, sandwich, glmnetRcpp
+RoxygenNote: 6.1.1
+VignetteBuilder: R.rsp
