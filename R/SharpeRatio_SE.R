@@ -62,9 +62,6 @@
 #' v 5.
 ###keywords ts multivariate distribution models
 
-#' @import PerformanceAnalytics
-#' @import IFs
-
 #' @examples
 #'
 #' data(managers)
@@ -95,14 +92,17 @@
 #' }
 #' @export
 #' @rdname SharpeRatio.SE
+#'
+#' @importFrom
+#' @import IFs
+#'
 SharpeRatio.SE <-
   function (R, Rf = 0, p = 0.95, FUN=c("StdDev", "VaR","ES"),
             weights=NULL, annualize = FALSE , ...,
             se.method = "none"){
 
     FUN = FUN[1]
-    mySR = SharpeRatio(R = R, Rf = Rf, p = p, FUN = FUN,
-                       weights = weights, annualize = annualize, ...)
+    mySR = SR(data = R, rf = Rf, ...)
 
 
     if(length(FUN)==1 & FUN=="StdDev" & is.null(weights) & annualize == FALSE & se.method[1]!="none"){
