@@ -115,7 +115,7 @@ SharpeRatio.SE <-
       res=list(SR=mySR)
       # for each of the method specified in se.method, compute the standard error
       for(mymethod in se.method){
-        res[[mymethod]]=EstimatorSE(R, estimator.fun = "SR", se.method = mymethod, rf = Rf)
+        res[[mymethod]]=EstimatorSE(R, estimator.fun = "SR", se.method = mymethod, rf = Rf, ...)
       }
       return(res)
     } else {

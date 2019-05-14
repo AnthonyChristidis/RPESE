@@ -111,7 +111,7 @@ StdDev.SE <- function (R , ..., clean=c("none","boudt","geltner"),
       res=list(SD=myStdDev)
       # for each of the method specified in se.method, compute the standard error
       for(mymethod in se.method){
-        res[[mymethod]]=EstimatorSE(R, estimator.fun = "SD", se.method = mymethod)
+        res[[mymethod]]=EstimatorSE(R, estimator.fun = "SD", se.method = mymethod, ...)
       }
       return(res)
     }

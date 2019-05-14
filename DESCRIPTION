@@ -16,6 +16,6 @@ Imports:
 Suggests:
     testthat, R.rsp
 Depends:
-    xts, zoo, robustbase, boot, h2o, glmGammaNet, sandwich, glmnetRcpp
+    xts, zoo, robustbase, boot, h2o, glmGammaENRcpp, sandwich, glmExpENRcpp
 RoxygenNote: 6.1.1
 VignetteBuilder: R.rsp
