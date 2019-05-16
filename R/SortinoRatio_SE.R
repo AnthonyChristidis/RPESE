@@ -80,7 +80,7 @@ SortinoRatio.SE <-
       res=list(SoR=mySoR)
       # for each of the method specified in se.method, compute the standard error
       for(mymethod in se.method){
-        res[[mymethod]]=EstimatorSE(R, estimator.fun = "SoR", se.method = mymethod, const = MAR, threshold=threshold, ...)
+        res[[mymethod]]=EstimatorSE(R, estimator.fun = "SoR", se.method = mymethod, const = MAR, threshold=threshold, MAR = MAR, ...)
       }
       return(res)
     } else {
