@@ -100,7 +100,8 @@ EstimatorSE = function(data, ...,
             IFcorPW = SE.xts(temp.data, SE.IF.cor, myfun, myfun.IF, prewhiten=TRUE, ...)
             if(0<=ar1.param & ar1.param<a)
               w = 0 else if(a<=ar1.param & ar1.param<=b)
-                w = (ar1.param - a)/(b - a)
+                w = (ar1.param - a)/(b - a) else
+                  w = 1
             res[my.col] = (1-w)*IFcor + w*IFcorPW
           }
           names(res) = colnames(data)
