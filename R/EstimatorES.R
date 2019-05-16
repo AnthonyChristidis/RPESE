@@ -31,8 +31,7 @@
 EstimatorSE = function(data, ...,
                    estimator.fun = c("Mean","SD","VaR","ES","SR","SoR","STARR", "SoR", "LPM", "Omega", "SSD"),
                    se.method = c("none","IFiid","IFcor", "IFcor.h2o", "BOOTiid","BOOTcor"),
-                   prewhiten = FALSE,
-                   adaptive = FALSE, a=0.3, b=0.7){
+                   prewhiten = FALSE, adaptive = FALSE, a=0.3, b=0.7){
 
   if(adaptive)
     if(prewhiten)
@@ -127,16 +126,16 @@ EstimatorSE = function(data, ...,
 #' @examples
 #' data(edhec)
 #' SE.xts(edhec, SE.IF.iid, sd, SD.IF)
-SE.xts = function(x, se.fun, myfun, myfun.IF, ...){
+SE.xts = function(x, se.fun, myfun, myfun.IF, prewhiten=FALSE, ...){
   if (is.vector(x) || is.null(ncol(x)) || ncol(x) == 1) {
     x <- as.numeric(x)
     #    if(na.rm) x <- na.omit(x)
-    return(se.fun(x = x, myfun = myfun, myfun.IF = myfun.IF, ...))
+    return(se.fun(x = x, myfun = myfun, myfun.IF = myfun.IF, prewhiten=FALSE, ...))
   }
   else {
     x <- coredata(x)
     #    if(na.rm) x <- na.omit(x)
-    return(apply(x, 2, se.fun, myfun = myfun, myfun.IF = myfun.IF, ... ))
+    return(apply(x, 2, se.fun, myfun = myfun, myfun.IF = myfun.IF, prewhiten=FALSE, ... ))
   }
 }
 
@@ -237,9 +236,9 @@ SE.BOOT.cor = function(x, myfun, myfun.IF, ..., nsim = 1000,
 #' @author Xin Chen, \email{chenx26@uw.edu}
 #'
 
-SE.IF.cor = function(x, myfun.IF, ..., return.coeffs = FALSE, d.GLM.EN = 5, alpha.EN = 0.5, keep = 1, standardize = FALSE){
+SE.IF.cor = function(x, myfun.IF, ..., return.coeffs = FALSE, d.GLM.EN = 5, alpha.EN = 0.5, keep = 1, standardize = FALSE, prewhiten=FALSE){
   d = d.GLM.EN
-  data.IF = myfun.IF(x, ...)
+  data.IF = myfun.IF(x, prewhiten=prewhiten, ...)
   tmp = SE.glmnet_exp(data.IF,  ..., standardize = standardize, return.coeffs = return.coeffs, d = d, alpha.EN = alpha.EN, keep = keep)
   if(return.coeffs){
     coeffs = tmp[[2]]
