@@ -29,8 +29,15 @@
 #' sim = "fixed", l = round(nrow(edhec)/5))
 
 EstimatorSE = function(data, ...,
-                   estimator.fun = c("Mean","SD","VaR","ES","SR","SoR","STARR", "SoR", "LPM", "OmegaRatio", "SSD"),
-                   se.method = c("none","IFiid","IFcor", "IFcor.h2o", "BOOTiid","BOOTcor")){
+                   estimator.fun = c("Mean","SD","VaR","ES","SR","SoR","STARR", "SoR", "LPM", "Omega", "SSD"),
+                   se.method = c("none","IFiid","IFcor", "IFcor.h2o", "BOOTiid","BOOTcor"),
+                   prewhiten = FALSE,
+                   adaptive = FALSE, a=0.3, b=0.7){
+
+  if(adaptive)
+    if(prewhiten)
+      stop("Only one of prewhiten or adaptive can be TRUE.")
+
   estimator.fun = estimator.fun[1]
   se.method = se.method[1]
   myfun = switch(estimator.fun,
@@ -39,8 +46,7 @@ EstimatorSE = function(data, ...,
                  VaR = VaR.hist,
                  ES = ES.hist,
                  SR = SR,
-                 SoR_M = SoR.mean,
-                 SoR_C = SoR.const,
+                 SoR = SoR,
                  STARR = STARR,
                  LPM = LPM,
                  OmegaRatio = OmegaRatio,
@@ -54,11 +60,10 @@ EstimatorSE = function(data, ...,
                      VaR = IF.VaR,
                      ES = IF.ES,
                      SR = IF.SR,
-                     SoR_M = IF.SoR.mean,
-                     SoR_C = IF.SoR.const,
-                     STARR = IF.STARR,
+                     SoR = IF.SoR,
+                     STARR = STARR,
                      LPM = IF.LPM,
-                     OmegaRatio = IF.OmegaRatio,
+                     OmegaRatio = IF.Omega,
                      SSD = IF.SSD,
                      RachevRatio = IF.Rachev,
                      stop("The estimator.fun specified is not implemented yet, please contact Xin Chen (chenx26@uw.edu) or submit an issue at the github repository")
@@ -67,11 +72,41 @@ EstimatorSE = function(data, ...,
   res = switch (se.method,
     none = NULL,
     IFiid = SE.xts(data, SE.IF.iid, myfun, myfun.IF, ...),
-    IFcor = SE.xts(data, SE.IF.cor, myfun, myfun.IF, ...),
     IFcor.h2o = SE.xts(data, SE.IF.cor.h2o, myfun, myfun.IF, ...),
     BOOTiid = SE.xts(data, SE.BOOT.iid, myfun, myfun.IF, ...),
     BOOTcor = SE.xts(data, SE.BOOT.cor, myfun, myfun.IF,...)
   )
+
+  # Adaptive method
+  if(se.method=="IFcor"){
+    if(!adaptive){
+      res = SE.xts(data, SE.IF.cor, myfun, myfun.IF, ...)
+    } else{
+        if(sum(ncol(data)>1)==0){
+        ar1.param = arima(x=data, order=c(1,0,0), include.mean=TRUE)[[1]][1]
+        IFcor = SE.xts(data, SE.IF.cor, myfun, myfun.IF, prewhiten=FALSE, ...)
+        IFcorPW = SE.xts(data, SE.IF.cor, myfun, myfun.IF, prewhiten=TRUE, ...)
+        if(0<=ar1.param & ar1.param<a)
+          w = 0 else if(a<=ar1.param & ar1.param<=b)
+            w = (ar1.param - a)/(b - a)
+        res = (1-w)*IFcor + w*IFcorPW
+        names(res) = NULL
+        } else{
+          res = numeric()
+          for(my.col in 1:ncol(data)){
+            temp.data = data[, my.col]
+            ar1.param = arima(x=temp.data, order=c(1,0,0), include.mean=TRUE)[[1]][1]
+            IFcor = SE.xts(temp.data, SE.IF.cor, myfun, myfun.IF, prewhiten=FALSE, ...)
+            IFcorPW = SE.xts(temp.data, SE.IF.cor, myfun, myfun.IF, prewhiten=TRUE, ...)
+            if(0<=ar1.param & ar1.param<a)
+              w = 0 else if(a<=ar1.param & ar1.param<=b)
+                w = (ar1.param - a)/(b - a)
+            res[my.col] = (1-w)*IFcor + w*IFcorPW
+          }
+          names(res) = colnames(data)
+        }
+      }
+  }
 
   return(res)
 }

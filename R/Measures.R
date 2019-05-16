@@ -76,6 +76,32 @@ RES=function(data,...,alpha=0.01,beta=0.1){
 #'
 #' @examples
 #' SoR(rnorm(10))
+SoR = function(data, ..., rf = 0, threshold=c("mean", "const")[1]){
+
+  if(threshold=="mean"){
+    mu.hat = mean(data)
+    sigma.minus.hat = sqrt(mean((data-mu.hat)^2*(data<=mu.hat)))
+    SoR.hat = (mu.hat-rf)/sigma.minus.hat
+    return(SoR.hat)
+  } else if (threshold=="const"){
+    mu.hat = mean(data)
+    sigma.minus.hat = sqrt(mean((data-MAR)^2*(data<=MAR)))
+    SoR.const.hat = (mu.hat-MAR)/sigma.minus.hat
+    return(SoR.const.hat)
+  }
+}
+
+#' Compute sample Sortino Ratio with mean threshold
+#'
+#' @param data vector of data
+#' @param rf risk-free rate
+#'
+#' @return Sample SoR
+#' @export
+#' @author Xin Chen, \email{chenx26@uw.edu}
+#'
+#' @examples
+#' SoR(rnorm(10))
 SoR.mean = function(data, ..., rf = 0){
   mu.hat = mean(data)
   sigma.minus.hat = sqrt(mean((data-mu.hat)^2*(data<=mu.hat)))

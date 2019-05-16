@@ -26,7 +26,7 @@
 #' asset returns
 #' @param MAR Minimum Acceptable Return, in the same periodicity as your
 #' returns
-#' @param sortino.method Parameter to determine whether we use a "mean" or "const" threshold.
+#' @param threshold Parameter to determine whether we use a "mean" or "const" threshold.
 #' @param \dots any other passthru parameters. This include two types of parameters.
 #' The first type is parameters associated with the risk/performance measure, such as tail
 #' probability for VaR and ES. The second type is the parameters associated with the metohd
@@ -55,7 +55,7 @@
 #'
 #' @export
 SortinoRatio.SE <-
-  function (R, ...,weights=NULL, se.method = "none", MAR = 0, sortino.method = c("mean", "const"))
+  function (R, ..., weights=NULL, se.method = "none", MAR = 0, threshold = c("mean", "const")[1])
   { # @author Brian G. Peterson and Xin Chen
     # modified from function by Sankalp Upadhyay <sankalp.upadhyay [at] gmail [dot] com> with permission
 
@@ -76,16 +76,11 @@ SortinoRatio.SE <-
       R=Return.portfolio(R,weights,...)
     }
 
-    # Deterimine whether we use a mean or constant threshold
-    sortino.method <- sortino.method[1]
-
     if(se.method[1]!="none"){
       res=list(SoR=mySoR)
       # for each of the method specified in se.method, compute the standard error
       for(mymethod in se.method){
-        if(sortino.method=="mean")
-          res[[mymethod]]=EstimatorSE(R, estimator.fun = "SoR_M", se.method = mymethod, const = MAR) else if(sortino.method=="const")
-            res[[mymethod]]=EstimatorSE(R, estimator.fun = "SoR_C", se.method = mymethod, const = MAR)
+        res[[mymethod]]=EstimatorSE(R, estimator.fun = "SoR", se.method = mymethod, const = MAR, threshold=threshold, ...)
       }
       return(res)
     } else {
