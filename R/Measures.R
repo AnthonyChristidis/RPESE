@@ -76,7 +76,7 @@ RES=function(data,...,alpha=0.01,beta=0.1){
 #'
 #' @examples
 #' SoR(rnorm(10))
-SoR = function(data, ..., rf = 0, threshold=c("mean", "const")[1]){
+SoR = function(data, ..., rf = 0, MAR = 0, threshold=c("mean", "const")[1]){
 
   if(threshold=="mean"){
     mu.hat = mean(data)
