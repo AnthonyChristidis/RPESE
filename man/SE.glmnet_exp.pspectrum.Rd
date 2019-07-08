@@ -11,9 +11,26 @@ SE.glmnet_exp.pspectrum(data, ..., d = 7, alpha.EN = 0.5, keep = 1,
 \arguments{
 \item{data}{vector of data}
 
+\item{...}{Additional parameters.}
+
 \item{d}{max order of polynomial}
 
-\item{exponential.dist}{}
+\item{alpha.EN}{Elastic net alpha parameter.}
+
+\item{keep}{Keep all frequencies or not.}
+
+\item{standardize}{Standardization or not.}
+
+\item{return.coeffs}{Return coefficients or not.}
+
+\item{prewhiten}{Prewhiten or not.}
+
+\item{twosided}{Two-sided or not.}
+
+\item{exponential.dist}{Parameter to determine if exponential distribution is used.}
+}
+\value{
+Long run variance of return data.
 }
 \description{
 Compute long run variance by using pspectrum to compute the tapered peridograms first then use glmnet_exp

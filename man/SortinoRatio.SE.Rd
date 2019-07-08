@@ -5,7 +5,7 @@
 \title{calculate Sortino Ratio of performance over downside risk}
 \usage{
 SortinoRatio.SE(R, ..., weights = NULL, se.method = "none", MAR = 0,
-  sortino.method = c("mean", "const"))
+  threshold = c("mean", "const")[1])
 }
 \arguments{
 \item{R}{an xts, vector, matrix, data frame, timeSeries or zoo object of
@@ -27,7 +27,7 @@ only when \code{method="historical"} and \code{portfolio_method="single"}.}
 \item{MAR}{Minimum Acceptable Return, in the same periodicity as your
 returns}
 
-\item{sortino.method}{Parameter to determine whether we use a "mean" or "const" threshold.}
+\item{threshold}{Parameter to determine whether we use a "mean" or "const" threshold.}
 }
 \description{
 Sortino proposed an improvement on the Sharpe Ratio to better account for

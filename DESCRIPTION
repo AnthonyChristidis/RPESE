@@ -11,7 +11,7 @@ License: GPL-3
 LazyData: TRUE
 Imports:
     sandwich,
-    IFs,
+    RPEIF,
     PerformanceAnalytics
 Suggests:
     testthat, R.rsp

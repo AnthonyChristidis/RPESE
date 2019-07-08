@@ -150,7 +150,7 @@
 #'     VaR.SE(edhec, clean="boudt", portfolio_method="component")
 #'
 #' @import PerformanceAnalytics
-#' @import IFs
+#' @import RPEIF
 #'
 #' @export
 VaR.SE <-

@@ -17,7 +17,7 @@
 #' @export
 #'
 #' @import PerformanceAnalytics
-#' @import IFs
+#' @import RPEIF
 #'
 #' @author Xin Chen, \email{chenx26@uw.edu}
 

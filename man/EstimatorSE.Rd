@@ -5,9 +5,9 @@
 \title{Wrapper function for computing the standard error of risk/performance measure estimators}
 \usage{
 EstimatorSE(data, ..., estimator.fun = c("Mean", "SD", "VaR", "ES", "SR",
-  "SoR", "STARR", "SoR", "LPM", "OmegaRatio", "SSD"),
-  se.method = c("none", "IFiid", "IFcor", "IFcor.h2o", "BOOTiid",
-  "BOOTcor"))
+  "SoR", "STARR", "SoR", "LPM", "Omega", "SSD"), se.method = c("none",
+  "IFiid", "IFcor", "IFcor.h2o", "BOOTiid", "BOOTcor"),
+  prewhiten = FALSE, adaptive = FALSE, a = 0.3, b = 0.7)
 }
 \arguments{
 \item{data}{xts object of the data}

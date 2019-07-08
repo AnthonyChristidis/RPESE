@@ -16,7 +16,7 @@
 #' @export
 #'
 #' @import PerformanceAnalytics
-#' @import IFs
+#' @import RPEIF
 #'
 #' @author Anthony-Alexander Christidis, \email{anthony.christidis@stat.ubc.ca}
 

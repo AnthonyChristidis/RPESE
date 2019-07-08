@@ -16,7 +16,7 @@
 #' @return a vector or a list depending on se.method
 #'
 #' @import PerformanceAnalytics
-#' @import IFs
+#' @import RPEIF
 #'
 #' @export
 #' @author Xin Chen, \email{chenx26@uw.edu}

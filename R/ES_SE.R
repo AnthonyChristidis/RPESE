@@ -79,7 +79,7 @@
 #' \code{\link{chart.VaRSensitivity}} \cr \code{\link{Return.clean}}
 #'
 #' @import PerformanceAnalytics
-#' @import IFs
+#' @import RPEIF
 #'
 #' @references Boudt, Kris, Peterson, Brian, and Christophe Croux. 2008.
 #' Estimation and decomposition of downside risk for portfolios with non-normal

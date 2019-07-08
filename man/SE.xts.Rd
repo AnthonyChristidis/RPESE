@@ -4,7 +4,7 @@
 \alias{SE.xts}
 \title{compute the standard error for the xts object}
 \usage{
-SE.xts(x, se.fun, myfun, myfun.IF, ...)
+SE.xts(x, se.fun, myfun, myfun.IF, prewhiten = FALSE, ...)
 }
 \arguments{
 \item{x}{the xts object of the data}

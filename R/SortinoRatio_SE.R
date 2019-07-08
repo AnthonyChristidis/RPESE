@@ -51,7 +51,7 @@
 #' round(SortinoRatio(managers[, 1:8]),4)
 #'
 #' @import PerformanceAnalytics
-#' @import IFs
+#' @import RPEIF
 #'
 #' @export
 SortinoRatio.SE <-

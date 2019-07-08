@@ -8,7 +8,6 @@
 #' @return long run variance of x
 #' @export
 #'
-#' @examples
 SE.pspectrum = function(x, ..., verbose = FALSE, plot = FALSE){
   n = length(x)
   res.pspectrum = pspectrum(x, verbose = verbose, plot = plot)

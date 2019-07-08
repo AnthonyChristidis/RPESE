@@ -93,8 +93,7 @@
 #' @export
 #' @rdname SharpeRatio.SE
 #'
-#' @importFrom
-#' @import IFs
+#' @import RPEIF
 #'
 SharpeRatio.SE <-
   function (R, Rf = 0, p = 0.95, FUN=c("StdDev", "VaR","ES"),

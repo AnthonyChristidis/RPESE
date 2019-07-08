@@ -13,7 +13,7 @@
 #' @return the standard error of the specified risk/performance measure using the specified method
 #'
 #' @import PerformanceAnalytics
-#' @import IFs
+#' @import RPEIF
 #'
 #' @export
 #' @author Xin Chen, \email{chenx26@uw.edu}
@@ -51,7 +51,7 @@ EstimatorSE = function(data, ...,
                  OmegaRatio = OmegaRatio,
                  SSD = SSD,
                  RachevRatio = RachevRatio,
-                 stop("The estimator.fun specified is not implemented yet, please contact Xin Chen (chenx26@uw.edu) or submit an issue at the github repository")
+                 stop("The estimator.fun specified is not implemented yet, please contact Anthony Christidis (anthony.christidis@stat.ubc.ca) or submit an issue at the github repository")
   )
   myfun.IF = switch (estimator.fun,
                      Mean = IF.mean,
@@ -65,7 +65,7 @@ EstimatorSE = function(data, ...,
                      OmegaRatio = IF.Omega,
                      SSD = IF.SSD,
                      RachevRatio = IF.Rachev,
-                     stop("The estimator.fun specified is not implemented yet, please contact Xin Chen (chenx26@uw.edu) or submit an issue at the github repository")
+                     stop("The estimator.fun specified is not implemented yet, please contact Anthony Christidis (anthony.christidis@stat.ubc.ca) or submit an issue at the github repository")
   )
 
   res = switch (se.method,
