@@ -10,12 +10,11 @@ Description: This package contains functions to compute the standard error of
 License: GPL-3
 LazyData: TRUE
 Imports:
-    sandwich,
     RPEIF,
     PerformanceAnalytics
 Suggests:
     testthat, R.rsp
 Depends:
-    xts, zoo, robustbase, boot, h2o, glmGammaENRcpp, sandwich, glmExpENRcpp
+    xts, zoo, robustbase, boot, h2o, RPEGLMEN, sandwich
 RoxygenNote: 6.1.1
 VignetteBuilder: R.rsp

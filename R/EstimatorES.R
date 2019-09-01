@@ -64,7 +64,7 @@ EstimatorSE = function(data, ...,
                      LPM = IF.LPM,
                      OmegaRatio = IF.Omega,
                      SSD = IF.SSD,
-                     RachevRatio = IF.Rachev,
+                     RachevRatio = IF.RachR,
                      stop("The estimator.fun specified is not implemented yet, please contact Anthony Christidis (anthony.christidis@stat.ubc.ca) or submit an issue at the github repository")
   )
 
@@ -194,7 +194,7 @@ SE.IF.cor.h2o = function(x, myfun.IF, ..., d = 5, alpha.lasso = 0.5, keep = 1){
 #'
 #' @examples
 #' SE.BOOT.iid(x = rnorm(100), myfun = mean, nsim = 100)
-SE.BOOT.iid = function(x, myfun, myfun.IF, ..., nsim = 100){
+SE.BOOT.iid = function(x, myfun, myfun.IF, prewhiten=FALSE, ..., nsim = 100){
   res = boot(data = x, statistic = function(x,i,...) myfun(x[i],...), R = nsim, ... = ...)
   return(sd(res$t))
 }
@@ -215,7 +215,7 @@ SE.BOOT.iid = function(x, myfun, myfun.IF, ..., nsim = 100){
 #'
 #' @examples
 #' SE.BOOT.cor(x = rnorm(100), myfun = mean, nsim = 100)
-SE.BOOT.cor = function(x, myfun, myfun.IF, ..., nsim = 1000,
+SE.BOOT.cor = function(x, myfun, myfun.IF, prewhiten=FALSE, ..., nsim = 1000,
                        sim = "fixed", l = round(length(x)/5)){
   res = tsboot(tseries = x, statistic = function(x,...) myfun(x,...), R = nsim,
                sim = sim, l = l,...)
@@ -237,7 +237,8 @@ SE.BOOT.cor = function(x, myfun, myfun.IF, ..., nsim = 1000,
 #' @author Xin Chen, \email{chenx26@uw.edu}
 #'
 
-SE.IF.cor = function(x, myfun.IF, ..., return.coeffs = FALSE, d.GLM.EN = 5, alpha.EN = 0.5, keep = 1, standardize = FALSE, prewhiten=FALSE){
+SE.IF.cor = function(x, myfun.IF, ..., return.coeffs = FALSE, d.GLM.EN = 5, alpha.EN = 0.5, keep = 1,
+                     standardize = FALSE, prewhiten=FALSE){
   d = d.GLM.EN
   data.IF = myfun.IF(x, prewhiten=prewhiten, ...)
   tmp = SE.glmnet_exp(data.IF,  ..., standardize = standardize, return.coeffs = return.coeffs, d = d, alpha.EN = alpha.EN, keep = keep)

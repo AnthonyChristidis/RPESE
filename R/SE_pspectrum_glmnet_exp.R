@@ -66,7 +66,7 @@ SE.glmnet_exp.pspectrum = function(data, ...,
   # fit the glmnet Gamma model
   if(!exponential.dist)
     res = fit.glmGammaNet(x.mat, my.periodogram, alpha.EN = alpha.EN, ...) else
-      res = glmnet_exp(x.mat, my.periodogram, ..., alpha.EN = alpha.EN)
+      res = glmnet_exp(x.mat, my.periodogram, alpha.EN = alpha.EN, ...)
   #  res = glmnet_exp(x.mat, my.periodogram, alpha = alpha)
 
   # Step 3: return the estimated variance, and coeffs if return.coeffs = TRUE
