@@ -1,13 +1,4 @@
-#' Compute the periodogram as defined in H&W 1981
-#'
-#' @param data Vector of data
-#' @param max.freq Maximum frequency to be computed
-#'
-#' @return list of frequencies and corresponding periodograms
-#' @export
-#'
-#' @examples
-#' myperiodogram(rnorm(10))
+# Compute the periodogram as defined in H&W 1981
 myperiodogram=function(data,..., max.freq=0.5, twosided = FALSE, keep = 1){
   ## data.fft=myfft(data) This is very slow
   data.fft=fft(data)
@@ -33,23 +24,7 @@ myperiodogram=function(data,..., max.freq=0.5, twosided = FALSE, keep = 1){
 ###### and the asymptotic variance of the sample mean is p(0)
 ###### K is the proportion of frequencies to keep, 1 means keep all
 
-#' Compute the variance of sample mean of the data
-#'
-#' Using GLM with L1 regularization to fit a polynomial from the periodogram then the intercept of the fitted polynomial is the spectral density p(0) at frequency 0
-#'
-#' @param data Vector of data
-#' @param d Maximum order of the polynomial
-#' @param alpha Weight of regularization. alpha=1 LASSO, alpha=0 Ridge
-#' @param keep Percentage of periodograms to use for regression
-#'
-#' @return variance of the sample mean. To get the asymptotic variance, multiply by length(data)
-#' @export
-#'
-#' @examples
-#' require(h2o)
-#' h2o.init()
-#' SE.GLM.LASSO(rnorm(10))
-#' # h2o.shutdown(prompt=FALSE)
+# Using GLM with L1 regularization to fit a polynomial from the periodogram then the intercept of the fitted polynomial is the spectral density p(0) at frequency 0
 SE.GLM.LASSO=function(data,d=5,alpha=1,keep=1){
 
   N=length(data)
@@ -98,18 +73,6 @@ SE.GLM.LASSO=function(data,d=5,alpha=1,keep=1){
   # Step 4: return the estimated variance
   return(p0.hat/N)
 }
-
-#' Compute the standard error of the mean of the data using glmnet_exp
-#'
-#' @param data vector of data
-#' @param d degree of polynomial
-#' @param alpha weight for Elastic Net regularizer
-#' @param keep what portion of sample spectral density to use for model fitting
-#' @param fitting.method Parameter to determine whether the exponential distribution is used. Gamma distribution is the default.
-#'
-#' @return variance of the mean of the data
-#' @export
-#'
 
 SE.glmnet_exp=function(data, ...,
                        d=7, alpha.EN=0.5,

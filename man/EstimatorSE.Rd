@@ -5,9 +5,10 @@
 \title{Wrapper function for computing the standard error of risk/performance measure estimators}
 \usage{
 EstimatorSE(data, ..., estimator.fun = c("Mean", "SD", "VaR", "ES", "SR",
-  "SoR", "STARR", "SoR", "LPM", "Omega", "SSD"), se.method = c("none",
-  "IFiid", "IFcor", "IFcor.h2o", "BOOTiid", "BOOTcor"),
-  prewhiten = FALSE, adaptive = FALSE, a = 0.3, b = 0.7)
+  "SoR", "ESratio", "VaRratio", "SoR", "LPM", "Omega", "SSD"),
+  se.method = c("none", "IFiid", "IFcor", "IFcor.h2o", "BOOTiid",
+  "BOOTcor"), prewhiten = FALSE, adaptive = FALSE, a = 0.3,
+  b = 0.7)
 }
 \arguments{
 \item{data}{xts object of the data}
@@ -40,5 +41,5 @@ EstimatorSE(edhec,estimator.fun="ES",se.method="BOOTcor", nsim=100,
 sim = "fixed", l = round(nrow(edhec)/5))
 }
 \author{
-Xin Chen, \email{chenx26@uw.edu}
+Anthony-Alexander Christidis, \email{anthony.christidis@stat.ubc.ca}
 }

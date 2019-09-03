@@ -1,19 +1,4 @@
-#' Compute long run variance by using pspectrum to compute the tapered peridograms first then use glmnet_exp
-#'
-#' @param data vector of data
-#' @param ... Additional parameters.
-#' @param d max order of polynomial
-#' @param alpha.EN Elastic net alpha parameter.
-#' @param keep Keep all frequencies or not.
-#' @param standardize Standardization or not.
-#' @param return.coeffs Return coefficients or not.
-#' @param prewhiten Prewhiten or not.
-#' @param twosided Two-sided or not.
-#' @param exponential.dist Parameter to determine if exponential distribution is used.
-#'
-#' @return Long run variance of return data.
-#' @export
-#'
+# Compute long run variance by using pspectrum to compute the tapered peridograms first then use glmnet_exp
 SE.glmnet_exp.pspectrum = function(data, ...,
                                    d=7, alpha.EN=0.5,
                                    keep=1,

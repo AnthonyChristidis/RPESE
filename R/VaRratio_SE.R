@@ -1,4 +1,4 @@
-#' Wrapper function that computes STARR and the standard error of the estimate
+#' Wrapper function that computes VaRratio and the standard error of the estimate
 #'
 #' @param data data
 #' @param \dots any other passthru parameters. This include two types of parameters.
@@ -19,20 +19,20 @@
 #' @import RPEIF
 #'
 #' @export
-#' @author Xin Chen, \email{chenx26@uw.edu}
+#' @author Anthony-Alexander Christidis, \email{anthony.christidis@stat.ubc.ca}
 #'
 
-STARR.SE = function(data, ..., alpha = 0.1, rf = 0, se.method = "none"){
+VaRratio.SE = function(data, ..., alpha = 0.1, rf = 0, se.method = "none"){
   data = checkData(data)
-  mySTARR = apply(data, 2, STARR, alpha = alpha, rf = rf, ...)
-  names(mySTARR) = colnames(data)
+  myVaRratio = apply(data, 2, VaRratio, alpha = alpha, rf = rf, ...)
+  names(myVaRratio) = colnames(data)
   if(se.method[1] == "none" & length(se.method)==1){
-    return(mySTARR)
+    return(myVaRratio)
   } else {
-    res=list(STARR=mySTARR)
+    res=list(VaRratio=myVaRratio)
     # for each of the method specified in se.method, compute the standard error
     for(mymethod in se.method){
-      res[[mymethod]]=EstimatorSE(data, estimator.fun = "STARR",
+      res[[mymethod]]=EstimatorSE(data, estimator.fun = "VaRratio",
                                   se.method = mymethod, alpha=alpha,
                                   rf = rf, ...)
     }

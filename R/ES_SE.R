@@ -131,14 +131,14 @@
 #'
 #'     # add Component ES for the equal weighted portfolio
 #'     ES.SE(edhec, clean="boudt", portfolio_method="component")
-#' @export ETL.SE CVaR.SE ES.SE
-ETL.SE <- CVaR.SE <- ES.SE <- function (R=NULL , p=0.95, ...,
-                               method=c("historical","gaussian","modified"),
-                               clean=c("none","boudt", "geltner"),
-                               portfolio_method=c("single","component"),
-                               weights=NULL, mu=NULL, sigma=NULL, m3=NULL, m4=NULL,
-                               invert=TRUE, operational=TRUE,
-                               se.method="none")
+#' @export ES.SE
+ES.SE <- function(R=NULL , p=0.95, ...,
+                  method=c("historical","gaussian","modified"),
+                  clean=c("none","boudt", "geltner"),
+                  portfolio_method=c("single","component"),
+                  weights=NULL, mu=NULL, sigma=NULL, m3=NULL, m4=NULL,
+                  invert=TRUE, operational=TRUE,
+                  se.method="none")
 { # @author Brian G. Peterson and Xin Chen
 
   # Descripion:

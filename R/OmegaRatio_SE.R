@@ -17,7 +17,7 @@
 #' @import PerformanceAnalytics
 #' @import RPEIF
 #'
-#' @author Xin Chen, \email{chenx26@uw.edu}
+#' @author Anthony-Alexander Christidis, \email{anthony.christidis@stat.ubc.ca}
 
 OmegaRatio.SE = function(data, ..., const = 0, se.method = "none"){
   data = checkData(data)

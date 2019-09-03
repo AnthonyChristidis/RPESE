@@ -1,13 +1,4 @@
-#' Use pspectrum function to compute long run variance
-#'
-#' @param x data
-#' @param ... other parameters
-#' @param verbose verbose or not
-#' @param plot plot or not
-#'
-#' @return long run variance of x
-#' @export
-#'
+# Use pspectrum function to compute long run variance
 SE.pspectrum = function(x, ..., verbose = FALSE, plot = FALSE){
   n = length(x)
   res.pspectrum = pspectrum(x, verbose = verbose, plot = plot)

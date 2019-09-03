@@ -33,5 +33,5 @@ a vector or a list depending on se.method
 Wrapper function that computes Rachev Ratio and the standard error of the estimate
 }
 \author{
-Xin Chen, \email{chenx26@uw.edu}
+Anthony-Alexander Christidis, \email{anthony.christidis@stat.ubc.ca}
 }

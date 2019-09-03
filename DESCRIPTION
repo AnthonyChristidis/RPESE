@@ -1,7 +1,7 @@
 Package: RPESE
 Type: Package
 Title: Risk/Performance Measure Estimator Standard Error
-Version: 0.1.0
+Version: 1.0
 Authors@R: c(
     person("Xin", "Chen", email = "chenx26@uw.edu", role = c("aut", "cre")),
     person("Anthony-Alexander", "Christidis", email = "anthony.christidis@stat.ubc.ca", role = c("aut")))
@@ -15,6 +15,6 @@ Imports:
 Suggests:
     testthat, R.rsp
 Depends:
-    xts, zoo, robustbase, boot, h2o, RPEGLMEN, sandwich
+    xts, zoo, robustbase, boot, RPEGLMEN, sandwich
 RoxygenNote: 6.1.1
 VignetteBuilder: R.rsp

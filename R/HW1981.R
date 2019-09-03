@@ -1,14 +1,3 @@
-#' Exact implementation of H&W 1981, compute the variance of the sample mean of the data
-#'
-#' @param data Vector of data
-#' @param K Number of periodograms to keep
-#' @param d Order of the polynomial fit
-#'
-#' @return Variance of the sample mean. To get asymptotic variance, multiply by length(data)
-#' @export
-#'
-#' @examples
-#' SE.HW1981(rnorm(10))
 SE.HW1981=function(data,K=25,d=2){
   N=length(data)
 

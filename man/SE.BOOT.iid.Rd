@@ -4,7 +4,7 @@
 \alias{SE.BOOT.iid}
 \title{Compute the standard error of the measure by iid bootstrapping}
 \usage{
-SE.BOOT.iid(x, myfun, myfun.IF, ..., nsim = 100)
+SE.BOOT.iid(x, myfun, myfun.IF, prewhiten = FALSE, ..., nsim = 100)
 }
 \arguments{
 \item{x}{vector of data}

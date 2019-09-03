@@ -16,7 +16,7 @@
 #' @import RPEIF
 #'
 #' @export
-#' @author Xin Chen, \email{chenx26@uw.edu}
+#' @author Anthony-Alexander Christidis, \email{anthony.christidis@stat.ubc.ca}
 #'
 #' @examples
 #' data(edhec)
@@ -29,7 +29,7 @@
 #' sim = "fixed", l = round(nrow(edhec)/5))
 
 EstimatorSE = function(data, ...,
-                   estimator.fun = c("Mean","SD","VaR","ES","SR","SoR","STARR", "SoR", "LPM", "Omega", "SSD"),
+                   estimator.fun = c("Mean","SD","VaR","ES","SR","SoR","ESratio", "VaRratio", "SoR", "LPM", "Omega", "SSD"),
                    se.method = c("none","IFiid","IFcor", "IFcor.h2o", "BOOTiid","BOOTcor"),
                    prewhiten = FALSE, adaptive = FALSE, a=0.3, b=0.7){
 
@@ -46,7 +46,8 @@ EstimatorSE = function(data, ...,
                  ES = ES.hist,
                  SR = SR,
                  SoR = SoR,
-                 STARR = STARR,
+                 ESratio = ESratio,
+                 VaRratio = VaRratio,
                  LPM = LPM,
                  OmegaRatio = OmegaRatio,
                  SSD = SSD,
@@ -60,7 +61,8 @@ EstimatorSE = function(data, ...,
                      ES = IF.ES,
                      SR = IF.SR,
                      SoR = IF.SoR,
-                     STARR = STARR,
+                     ESratio = IF.ESratio,
+                     VaRratio = IF.VaRratio,
                      LPM = IF.LPM,
                      OmegaRatio = IF.Omega,
                      SSD = IF.SSD,
@@ -121,7 +123,6 @@ EstimatorSE = function(data, ...,
 #' @param ... other parameters
 #'
 #' @return standard errors
-#' @export
 #' @author Xin Chen, \email{chenx26@uw.edu}
 #'
 #' @examples
@@ -147,7 +148,6 @@ SE.xts = function(x, se.fun, myfun, myfun.IF, prewhiten=FALSE, ...){
 #' @param ... other parameters used to compute the influence function
 #'
 #' @return standard error of the measure
-#' @export
 #' @author Xin Chen, \email{chenx26@uw.edu}
 #'
 #' @examples
@@ -170,7 +170,6 @@ SE.IF.iid = function(x, myfun.IF, ...){
 #' @param ... other parameters
 #'
 #' @return the standard error of the measure
-#' @export
 #' @author Xin Chen, \email{chenx26@uw.edu}
 #'
 
@@ -189,7 +188,6 @@ SE.IF.cor.h2o = function(x, myfun.IF, ..., d = 5, alpha.lasso = 0.5, keep = 1){
 #' @param myfun.IF not used
 #'
 #' @return standard error
-#' @export
 #' @author Xin Chen, \email{chenx26@uw.edu}
 #'
 #' @examples
@@ -210,7 +208,6 @@ SE.BOOT.iid = function(x, myfun, myfun.IF, prewhiten=FALSE, ..., nsim = 100){
 #' @param l the length of the fixed block
 #'
 #' @return standard error
-#' @export
 #' @author Xin Chen, \email{chenx26@uw.edu}
 #'
 #' @examples
@@ -233,7 +230,6 @@ SE.BOOT.cor = function(x, myfun, myfun.IF, prewhiten=FALSE, ..., nsim = 1000,
 #' @param ... other parameters
 #'
 #' @return the standard error of the measure
-#' @export
 #' @author Xin Chen, \email{chenx26@uw.edu}
 #'
 

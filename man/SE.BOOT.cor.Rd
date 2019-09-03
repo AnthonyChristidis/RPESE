@@ -4,8 +4,8 @@
 \alias{SE.BOOT.cor}
 \title{Compute the standard error of the measure by tsboot()}
 \usage{
-SE.BOOT.cor(x, myfun, myfun.IF, ..., nsim = 1000, sim = "fixed",
-  l = round(length(x)/5))
+SE.BOOT.cor(x, myfun, myfun.IF, prewhiten = FALSE, ..., nsim = 1000,
+  sim = "fixed", l = round(length(x)/5))
 }
 \arguments{
 \item{x}{vector of data}
