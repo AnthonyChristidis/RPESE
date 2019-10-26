@@ -83,9 +83,9 @@ OmegaRatio = function(data, ..., const = 0){
 }
 
 # Compute Semi-Standard Deviation
-SSDest = function(data, ..., rf=0){
+SemiSD = function(data, ..., rf=0){
 
-    mySSD = PerformanceAnalytics::SemiDeviation(data-rf, MAR=mean(data))
+    mySSD = PerformanceAnalytics::SemiDeviation(data-rf)
     return(mySSD)
 }
 

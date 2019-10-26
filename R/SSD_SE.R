@@ -38,7 +38,7 @@ SemiSD.SE <- function(data, rf=0,
                       prewhiten=FALSE, cleanOutliers=FALSE, fitting.method=c("Exponential", "Gamma")[1],
                       ...){
   data = checkData(data)
-  mySSD = t(apply(data, 2, SSDest, rf, ...))
+  mySSD = t(apply(data, 2, SemiSD, rf, ...))
   rownames(mySSD) = "SSD"
   if(se.method[1] == "none" & length(se.method)==1){
     return(mySSD)
