@@ -1,47 +1,9 @@
-###############################################################################
-# $Id$
-###############################################################################
-
-
-
-
-
-#' calculate various Value at Risk (VaR) measures
+#' @title Standard Error Estimate for Value-at-Risk (VaR) of Returns
 #'
-#' Calculates Value-at-Risk(VaR) for univariate, component, and marginal cases
-#' using a variety of analytical methods.
+#' @description \code{VaR.SE} computes the standard error of the value-at-risk of the returns.
 #'
-#'
-#' @aliases VaR.SE VaR.CornishFisher.SE
-#' @param R an xts, vector, matrix, data frame, timeSeries or zoo object of
-#' asset returns
-#' @param p confidence level for calculation, default p=.95
-#' @param method one of "modified","gaussian","historical", "kernel", see
-#' Details.
-#' @param clean method for data cleaning through \code{\link{Return.clean}}.
-#' Current options are "none", "boudt", or "geltner".
-#' @param portfolio_method one of "single","component","marginal" defining
-#' whether to do univariate, component, or marginal calc, see Details.
-#' @param weights portfolio weighting vector, default NULL, see Details
-#' @param mu If univariate, mu is the mean of the series. Otherwise mu is the
-#' vector of means of the return series , default NULL, , see Details
-#' @param sigma If univariate, sigma is the variance of the series. Otherwise
-#' sigma is the covariance matrix of the return series , default NULL, see
-#' Details
-#' @param m3 If univariate, m3 is the skewness of the series. Otherwise m3 is
-#' the coskewness matrix of the returns series, default NULL, see Details
-#' @param m4 If univariate, m4 is the excess kurtosis of the series. Otherwise
-#' m4 is the cokurtosis matrix of the return series, default NULL, see Details
-#' @param invert TRUE/FALSE whether to invert the VaR measure.  see Details.
-#' @param \dots any other passthru parameters. This include two types of parameters.
-#' The first type is parameters associated with the risk/performance measure, such as tail
-#' probability for VaR and ES. The second type is the parameters associated with the metohd
-#' used to compute the standard error. See \code{\link{SE.IF.iid}}, \code{\link{SE.IF.cor}},
-#' \code{\link{SE.BOOT.iid}}, \code{\link{SE.BOOT.cor}} for details.
-#' @param se.method a character string indicating which method should be used to compute
-#' the standard error of the estimated standard deviation. One of \code{"none"} (default),
-#' \code{"IFiid"}, \code{"IFcor"}, \code{"BOOTiid"}, \code{"BOOTcor"}
-#' @note The option to \code{invert} the VaR measure should appease both
+#' @note
+#' The option to \code{invert} the VaR measure should appease both
 #' academics and practitioners.  The mathematical definition of VaR as the
 #' negative value of a quantile will (usually) produce a positive number.
 #' Practitioners will argue that VaR denotes a loss, and should be internally
@@ -54,7 +16,9 @@
 #' The prototype of the univariate Cornish Fisher VaR function was completed by
 #' Prof. Diethelm Wuertz.  All corrections to the calculation and error
 #' handling are the fault of Brian Peterson.
-#' @section Background: This function provides several estimation methods for
+#'
+#' @section
+#' Background: This function provides several estimation methods for
 #' the Value at Risk (typically written as VaR) of a return series and the
 #' Component VaR of a portfolio. Take care to capitalize VaR in the commonly
 #' accepted manner, to avoid confusion with var (variance) and VAR (vector
@@ -70,10 +34,7 @@
 #' to decompose total portfolio VaR into the risk contributions of each of the
 #' portfolio components.  For the above mentioned VaR estimators, such a
 #' decomposition is possible in a financially meaningful way.
-#' @author Xin Chen, \email{chenx26@uw.edu}
-#' @seealso \code{\link{SharpeRatio.modified}} \cr
-#' \code{\link{chart.VaRSensitivity}} \cr
-#' \code{\link{Return.clean}}
+#'
 #' @references Boudt, Kris, Peterson, Brian, and Christophe Croux. 2008.
 #' Estimation and decomposition of downside risk for portfolios with non-normal
 #' returns. 2008. The Journal of Risk, vol. 11, 79-103.
@@ -124,38 +85,41 @@
 #'    Value-at-Risk: Their Estimation Error, Decomposition, and Optimization",
 #'    Bank of Japan.
 #'
-###keywords ts multivariate distribution models
-#' @examples
+#' @param data Data of returns for one or multiple assets or portfolios.
+#' @param p Confidence level for calculation. Default is p=0.95.
+#' @param se.method A character string indicating which method should be used to compute
+#' the standard error of the estimated standard deviation. One or a combination of:
+#' \code{"IFiid"} (default), \code{"IFcor"} (default), \code{"IFcorAdapt"} (default),
+#' \code{"BOOTiid"}, \code{"BOOTcor"}, or \code{"none"}.
+#' @param prewhiten Boolean variable to indicate if the IF TS is pre-whitened (TRUE) or not (FALSE).
+#' @param cleanOutliers Boolean variable to indicate whether the pre-whitenning of the influence functions TS should be done through a robust filter.
+#' @param fitting.method Distribution used in the standard errors computation. Should be one of "Exponential" (default) or "Gamma".
+#' @param ... Additional parameters.
 #'
-#'     data(edhec)
-#'
-#'     # first do normal VaR calc
-#'     VaR.SE(edhec, p=.95, method="historical")
-#'
-#'     # now use Gaussian
-#'     VaR.SE(edhec, p=.95, method="gaussian")
-#'
-#'     # now use modified Cornish Fisher calc to take non-normal distribution into account
-#'     VaR.SE(edhec, p=.95, method="modified")
-#'
-#'     # now use p=.99
-#'     VaR.SE(edhec, p=.99)
-#'     # or the equivalent alpha=.01
-#'     VaR.SE(edhec, p=.01)
-#'
-#'     # now with outliers squished
-#'     VaR.SE(edhec, clean="boudt")
-#'
-#'     # add Component VaR for the equal weighted portfolio
-#'     VaR.SE(edhec, clean="boudt", portfolio_method="component")
-#'
-#' @import PerformanceAnalytics
-#' @import RPEIF
+#' @return A vector or a list depending on \code{se.method}.
 #'
 #' @export
-VaR.SE <-
-  function (R=NULL , p=0.95, ..., method=c("modified","gaussian","historical", "kernel"), clean=c("none","boudt","geltner"),  portfolio_method=c("single","component","marginal"), weights=NULL, mu=NULL, sigma=NULL, m3=NULL, m4=NULL, invert=TRUE,
-            se.method="none")
+#'
+#' @author Anthony-Alexander Christidis, \email{anthony.christidis@stat.ubc.ca}
+#'
+#' @examples
+#' # Loading data from PerformanceAnalytics
+#' data(edhec, package = "PerformanceAnalytics")
+#' class(edhec)
+#' # Changing the data colnames
+#' names(edhec) = c("CA", "CTA", "DIS", "EM", "EMN",
+#'                  "ED", "FIA", "GM", "LS", "MA",
+#'                  "RV", "SS", "FOF")
+#' # Computing the standard errors for
+#' # the three influence functions based approaches
+#' VaR.SE(edhec, se.method=c("IFiid","IFcor","IFcorAdapt"),
+#'        prewhiten=FALSE, cleanOutliers=FALSE,
+#'        fitting.method=c("Exponential", "Gamma")[1])
+#'
+VaR.SE <- function(data=NULL , p=0.95,
+                   se.method=c("IFiid","IFcor", "IFcorAdapt","BOOTiid","BOOTcor","none")[1:3],
+                   prewhiten=FALSE, cleanOutliers=FALSE, fitting.method=c("Exponential", "Gamma")[1],
+                   ...)
   { # @author Brian G. Peterson and Xin Chen
 
     # Descripion:
@@ -166,43 +130,46 @@ VaR.SE <-
     #if(exists(modified)({if( modified == TRUE) { method="modified" }}
     #if(method == TRUE or is.null(method) ) { method="modified" }
 
-    myVaR = VaR(R=R , p=p, ..., method=method,
-                       clean=clean,  portfolio_method=portfolio_method,
-                       weights=weights, mu=mu, sigma=sigma, m3=m3, m4=m4, invert=invert)
-
-
-    method = method[1]
+    # Forcing the following parameters
+    method=c("modified","gaussian","historical", "kernel")[3]
+    clean=c("none","boudt","geltner")
+    portfolio_method=c("single","component","marginal")
+    weights=NULL; mu=NULL; sigma=NULL; m3=NULL; m4=NULL; invert=TRUE
     clean = clean[1]
     portfolio_method = portfolio_method[1]
+
+    myVaR = VaR(R = data , p=p, ..., method=method,
+                       clean=clean,  portfolio_method=portfolio_method,
+                       weights=weights, mu=mu, sigma=sigma, m3=m3, m4=m4, invert=invert)
 
     ## when VaR is computed using single and historical, compute standard error
 
     if(portfolio_method == "single" & is.null(weights) & method == "historical"){
-    if(!is.null(R)){
-      R <- checkData(R, method="xts", ...)
-      columns=colnames(R)
+    if(!is.null(data)){
+      data <- checkData(data, method="xts", ...)
+      columns=colnames(data)
       if (!is.null(weights) & portfolio_method != "single") {
-        if ( length(weights) != ncol(R)) {
-          stop("number of items in weights not equal to number of columns in R")
+        if ( length(weights) != ncol(data)) {
+          stop("number of items in weights not equal to number of columns in data")
         }
       }
       # weights = checkData(weights, method="matrix", ...) #is this necessary?
-      # TODO check for date overlap with R and weights
-      if(clean!="none" & is.null(mu)){ # the assumption here is that if you've passed in any moments, we'll leave R alone
-        R = as.matrix(PerformanceAnalytics::Return.clean(R, method=clean))
+      # TODO check for date overlap with data and weights
+      if(clean!="none" & is.null(mu)){ # the assumption here is that if you've passed in any moments, we'll leave data alone
+        data = as.matrix(PerformanceAnalytics::Return.clean(data, method=clean))
       }
       if(portfolio_method != "single"){
         # get the moments ready
-        if (is.null(mu)) { mu =  apply(R,2,'mean' ) }
-        if (is.null(sigma)) { sigma = cov(R) }
+        if (is.null(mu)) { mu =  apply(data,2,'mean' ) }
+        if (is.null(sigma)) { sigma = cov(data) }
         if(method=="modified"){
-          if (is.null(m3)) {m3 = M3.MM(R)}
-          if (is.null(m4)) {m4 = M4.MM(R)}
+          if (is.null(m3)) {m3 = M3.MM(data)}
+          if (is.null(m4)) {m4 = M4.MM(data)}
         }
       }
     } else {
-      #R is null, check for moments
-      if(is.null(mu)) stop("Nothing to do! You must pass either R or the moments mu, sigma, etc.")
+      #data is null, check for moments
+      if(is.null(mu)) stop("Nothing to do! You must pass either data or the moments mu, sigma, etc.")
       if ( length(weights) != length(mu)) {
         stop("number of items in weights not equal to number of items in the mean vector")
       }
@@ -213,7 +180,12 @@ VaR.SE <-
         res=list(VaR=myVaR)
         # for each of the method specified in se.method, compute the standard error
         for(mymethod in se.method){
-          res[[mymethod]]=EstimatorSE(R, estimator.fun = "VaR", se.method = mymethod, alpha=1-p)
+          res[[mymethod]]=EstimatorSE(data, estimator.fun = "VaR", alpha=1-p,
+                                      se.method = mymethod,
+                                      prewhiten=prewhiten,
+                                      cleanOutliers=cleanOutliers,
+                                      fitting.method=fitting.method,
+                                      ...)
         }
         return(res)
       }

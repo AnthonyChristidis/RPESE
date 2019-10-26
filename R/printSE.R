@@ -1,36 +1,53 @@
-#' Formatted output of the results from xxx.SE() functions
+#' @title Formatted Output for Standard Errors Functions in RPESE
 #'
-#' @param res the results from the xx.SE() functions
-#' @param valonly if true, return only the data frame, otherwise print and return data frame
-#' @param round.digit the number of digits to round to
+#' @description \code{printSE} returns a formatted output from standard error functions from RPESE.
 #'
-#' @return data frame
+#' @param SE.data Standard error estimates output from RPESE functions.
+#' @param round.digit Number of digits for rounding.
+#' @param val.only Confidence level for calculation. Default is p=0.95.
+#'
+#' @return A data frame with formatted output from standard error functions from \code{RPESE}.
+#'
 #' @export
+#'
 #' @author Xin Chen, \email{chenx26@uw.edu}
+#' @author Anthony-Alexander Christidis, \email{anthony.christidis@stat.ubc.ca}
 #'
 #' @examples
-#' data(edhec)
-#' res = ES.SE(edhec, p=.95, method="historical",se.method = "IFiid")
-#' printSE(res, round.digit = 4)
-printSE = function(res , round.digit = 3, valonly = TRUE){
-  N = length(res)
+#' # Loading data from PerformanceAnalytics
+#' data(edhec, package = "PerformanceAnalytics")
+#' class(edhec)
+#' # Changing the data colnames
+#' names(edhec) = c("CA", "CTA", "DIS", "EM", "EMN",
+#'                  "ED", "FIA", "GM", "LS", "MA",
+#'                  "RV", "SS", "FOF")
+#' # Computing the standard errors for
+#' # the three influence functions based approaches
+#' ES.out <- ES.SE(edhec, se.method=c("IFiid","IFcor","IFcorAdapt"),
+#'                 prewhiten=FALSE, cleanOutliers=FALSE,
+#'                 fitting.method=c("Exponential", "Gamma")[1])
+#' # Print the output
+#' printSE(ES.out)
+#'
+printSE <- function(SE.data, round.digit = 3, val.only = TRUE){
+  N = length(SE.data)
   # if(N != 2) {
-  #   cat("the results do not contain standard errors!\n")
+  #   cat("the SE.dataults do not contain standard errors!\n")
   #   return()
   # }
-  list.names = names(res)
-  res.df = data.frame(t(res[[1]]))
+  list.names = names(SE.data)
+  SE.data.df = data.frame(t(SE.data[[1]]))
   for(i in 2:length(list.names)){
-    res.df = cbind(res.df, res[[i]])
+    SE.data.df = cbind(SE.data.df, SE.data[[i]])
   }
-  colnames(res.df) = list.names
-  rownames(res.df) = colnames(res[[1]])
-#  res.df = round(res.df, digits = round.digit)
-  if(valonly){
-    return(res.df)
+  colnames(SE.data.df) = list.names
+  rownames(SE.data.df) = colnames(SE.data[[1]])
+#  SE.data.df = round(SE.data.df, digits = round.digit)
+  if(val.only){
+    return(SE.data.df)
   }
-  print(res.df, digits = round.digit)
-  # res.df[2] = paste("(",res.df[,2],")",sep="")
-  # res.df[,-1] = apply(as.data.frame(res.df[,-1]),2,function(x) paste("(",x,")",sep=""))
+  print(SE.data.df, digits = round.digit)
+  # SE.data.df[2] = paste("(",SE.data.df[,2],")",sep="")
+  # SE.data.df[,-1] = apply(as.data.frame(SE.data.df[,-1]),2,function(x) paste("(",x,")",sep=""))
 
 }

@@ -2,28 +2,42 @@
 % Please edit documentation in R/printSE.R
 \name{printSE}
 \alias{printSE}
-\title{Formatted output of the results from xxx.SE() functions}
+\title{Formatted Output for Standard Errors Functions in RPESE}
 \usage{
-printSE(res, round.digit = 3, valonly = TRUE)
+printSE(SE.data, round.digit = 3, val.only = TRUE)
 }
 \arguments{
-\item{res}{the results from the xx.SE() functions}
+\item{SE.data}{Standard error estimates output from RPESE functions.}
 
-\item{round.digit}{the number of digits to round to}
+\item{round.digit}{Number of digits for rounding.}
 
-\item{valonly}{if true, return only the data frame, otherwise print and return data frame}
+\item{val.only}{Confidence level for calculation. Default is p=0.95.}
 }
 \value{
-data frame
+A data frame with formatted output from standard error functions from \code{RPESE}.
 }
 \description{
-Formatted output of the results from xxx.SE() functions
+\code{printSE} returns a formatted output from standard error functions from RPESE.
 }
 \examples{
-data(edhec)
-res = ES.SE(edhec, p=.95, method="historical",se.method = "IFiid")
-printSE(res, round.digit = 4)
+# Loading data from PerformanceAnalytics
+data(edhec, package = "PerformanceAnalytics")
+class(edhec)
+# Changing the data colnames
+names(edhec) = c("CA", "CTA", "DIS", "EM", "EMN",
+                 "ED", "FIA", "GM", "LS", "MA",
+                 "RV", "SS", "FOF")
+# Computing the standard errors for
+# the three influence functions based approaches
+ES.out <- ES.SE(edhec, se.method=c("IFiid","IFcor","IFcorAdapt"),
+                prewhiten=FALSE, cleanOutliers=FALSE,
+                fitting.method=c("Exponential", "Gamma")[1])
+# Print the output
+printSE(ES.out)
+
 }
 \author{
 Xin Chen, \email{chenx26@uw.edu}
+
+Anthony-Alexander Christidis, \email{anthony.christidis@stat.ubc.ca}
 }

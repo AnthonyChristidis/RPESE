@@ -2,33 +2,53 @@
 % Please edit documentation in R/VaRratio_SE.R
 \name{VaRratio.SE}
 \alias{VaRratio.SE}
-\title{Wrapper function that computes VaRratio and the standard error of the estimate}
+\title{Standard Error Estimate for Value-at-Risk Ratio (VaRratio) of Returns}
 \usage{
-VaRratio.SE(data, ..., alpha = 0.1, rf = 0, se.method = "none")
+VaRratio.SE(data, alpha = 0.1, rf = 0, se.method = c("IFiid",
+  "IFcor", "IFcorAdapt", "BOOTiid", "BOOTcor", "none")[1:3],
+  prewhiten = FALSE, cleanOutliers = FALSE,
+  fitting.method = c("Exponential", "Gamma")[1], ...)
 }
 \arguments{
-\item{data}{data}
+\item{data}{Data of returns for one or multiple assets or portfolios.}
 
-\item{\dots}{any other passthru parameters. This include two types of parameters.
-The first type is parameters associated with the risk/performance measure, such as tail
-probability for VaR and ES. The second type is the parameters associated with the metohd
-used to compute the standard error. See \code{\link{SE.IF.iid}}, \code{\link{SE.IF.cor}},
-\code{\link{SE.BOOT.iid}}, \code{\link{SE.BOOT.cor}} for details.}
+\item{alpha}{The tail probability of interest.}
 
-\item{alpha}{tail probability}
+\item{rf}{Risk-free interest rate.}
 
-\item{rf}{risk free rate}
+\item{se.method}{A character string indicating which method should be used to compute
+the standard error of the estimated standard deviation. One or a combination of:
+\code{"IFiid"} (default), \code{"IFcor"} (default), \code{"IFcorAdapt"} (default),
+\code{"BOOTiid"}, \code{"BOOTcor"}, or \code{"none"}.}
 
-\item{se.method}{a character string indicating which method should be used to compute
-the standard error of the estimated standard deviation. One of \code{"none"} (default),
-\code{"IFiid"}, \code{"IFcor"}, \code{"BOOTiid"}, \code{"BOOTcor"}. Currently, it works
-only when \code{method="historical"} and \code{portfolio_method="single"}.}
+\item{prewhiten}{Boolean variable to indicate if the IF TS is pre-whitened (TRUE) or not (FALSE).}
+
+\item{cleanOutliers}{Boolean variable to indicate whether the pre-whitenning of the influence functions TS should be done through a robust filter.}
+
+\item{fitting.method}{Distribution used in the standard errors computation. Should be one of "Exponential" (default) or "Gamma".}
+
+\item{...}{Additional parameters.}
 }
 \value{
-a vector or a list depending on se.method
+A vector or a list depending on \code{se.method}.
 }
 \description{
-Wrapper function that computes VaRratio and the standard error of the estimate
+\code{VaRratio.SE} computes the standard error of the value-at-risk ratio of the returns.
+}
+\examples{
+# Loading data from PerformanceAnalytics
+data(edhec, package = "PerformanceAnalytics")
+class(edhec)
+# Changing the data colnames
+names(edhec) = c("CA", "CTA", "DIS", "EM", "EMN",
+                 "ED", "FIA", "GM", "LS", "MA",
+                 "RV", "SS", "FOF")
+# Computing the standard errors for
+# the three influence functions based approaches
+VaRratio.SE(edhec, se.method=c("IFiid","IFcor","IFcorAdapt"),
+            prewhiten=FALSE, cleanOutliers=FALSE,
+            fitting.method=c("Exponential", "Gamma")[1])
+
 }
 \author{
 Anthony-Alexander Christidis, \email{anthony.christidis@stat.ubc.ca}

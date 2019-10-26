@@ -2,107 +2,51 @@
 % Please edit documentation in R/StdDev_SE.R
 \name{StdDev.SE}
 \alias{StdDev.SE}
-\title{calculates Standard Deviation for univariate and multivariate series, also
-calculates component contribution to standard deviation of a portfolio}
+\title{Standard Error Estimate for Standard Deviation (StdDev) of Returns}
 \usage{
-StdDev.SE(R, ..., clean = c("none", "boudt", "geltner"),
-  portfolio_method = c("single", "component"), weights = NULL,
-  mu = NULL, sigma = NULL, use = "everything",
-  method = c("pearson", "kendall", "spearman"), se.method = "none")
+StdDev.SE(data, se.method = c("IFiid", "IFcor", "IFcorAdapt", "BOOTiid",
+  "BOOTcor", "none")[1:3], prewhiten = FALSE, cleanOutliers = FALSE,
+  fitting.method = c("Exponential", "Gamma")[1], ...)
 }
 \arguments{
-\item{R}{a vector, matrix, data frame, timeSeries or zoo object of asset
-returns}
+\item{data}{Data of returns for one or multiple assets or portfolios.}
 
-\item{\dots}{any other passthru parameters. This include two types of parameters.
-The first type is parameters associated with the risk/performance measure, such as tail
-probability for VaR and ES. The second type is the parameters associated with the metohd
-used to compute the standard error. See \code{\link{SE.IF.iid}}, \code{\link{SE.IF.cor}},
-\code{\link{SE.BOOT.iid}}, \code{\link{SE.BOOT.cor}} for details.}
+\item{se.method}{A character string indicating which method should be used to compute
+the standard error of the estimated standard deviation. One or a combination of:
+\code{"IFiid"} (default), \code{"IFcor"} (default), \code{"IFcorAdapt"} (default),
+\code{"BOOTiid"}, \code{"BOOTcor"}, or \code{"none"}.}
 
-\item{clean}{method for data cleaning through \code{\link{Return.clean}}.
-Current options are "none", "boudt", or "geltner".}
+\item{prewhiten}{Boolean variable to indicate if the IF TS is pre-whitened (TRUE) or not (FALSE).}
 
-\item{portfolio_method}{one of "single","component" defining whether to do
-univariate/multivariate or component calc, see Details.}
+\item{cleanOutliers}{Boolean variable to indicate whether the pre-whitenning of the influence functions TS should be done through a robust filter.}
 
-\item{weights}{portfolio weighting vector, default NULL, see Details}
+\item{fitting.method}{Distribution used in the standard errors computation. Should be one of "Exponential" (default) or "Gamma".}
 
-\item{mu}{If univariate, mu is the mean of the series. Otherwise mu is the
-vector of means of the return series , default NULL, , see Details}
-
-\item{sigma}{If univariate, sigma is the variance of the series. Otherwise
-sigma is the covariance matrix of the return series , default NULL, see
-Details}
-
-\item{use}{an optional character string giving a method for computing
-covariances in the presence of missing values.  This must be (an
-abbreviation of) one of the strings \code{"everything"}, \code{"all.obs"},
-\code{"complete.obs"}, \code{"na.or.complete"}, or
-\code{"pairwise.complete.obs"}.}
-
-\item{method}{a character string indicating which correlation coefficient
-(or covariance) is to be computed.  One of \code{"pearson"} (default),
-\code{"kendall"}, or \code{"spearman"}, can be abbreviated.}
-
-\item{se.method}{a character string indicating which method should be used to compute
-the standard error of the estimated standard deviation. One of \code{"none"} (default),
-\code{"IFiid"}, \code{"IFcor"}, \code{"BOOTiid"}, \code{"BOOTcor"}. Currently, it works
-only when \code{method="historical"} and \code{portfolio_method="single"}.}
+\item{...}{Additional parameters.}
+}
+\value{
+A vector or a list depending on \code{se.method}.
 }
 \description{
-calculates Standard Deviation for univariate and multivariate series, also
-calculates component contribution to standard deviation of a portfolio
-}
-\details{
-TODO add more details
-
-This wrapper function provides fast matrix calculations for univariate,
-multivariate, and component contributions to Standard Deviation.
-
-It is likely that the only one that requires much description is the
-component decomposition.  This provides a weighted decomposition of the
-contribution each portfolio element makes to the univariate standard
-deviation of the whole portfolio.
-
-Formally, this is the partial derivative of each univariate standard
-deviation with respect to the weights.
-
-As with \code{\link{VaR}}, this contribution is presented in two forms, both
-a scalar form that adds up to the univariate standard deviation of the
-portfolio, and a percentage contribution, which adds up to 100%.  Note that
-as with any contribution calculation, contribution can be negative.  This
-indicates that the asset in question is a diversified to the overall
-standard deviation of the portfolio, and increasing its weight in relation
-to the rest of the portfolio would decrease the overall portfolio standard
-deviation.
+\code{StdDev.SE} computes the standard error of the standard deviation of the returns.
 }
 \examples{
+# Loading data from PerformanceAnalytics
+data(edhec, package = "PerformanceAnalytics")
+class(edhec)
+# Changing the data colnames
+names(edhec) = c("CA", "CTA", "DIS", "EM", "EMN",
+                 "ED", "FIA", "GM", "LS", "MA",
+                 "RV", "SS", "FOF")
+# Computing the standard errors for
+# the three influence functions based approaches
+StdDev.SE(edhec, se.method=c("IFiid","IFcor","IFcorAdapt"),
+          prewhiten=FALSE, cleanOutliers=FALSE,
+          fitting.method=c("Exponential", "Gamma")[1])
 
-    data(edhec)
-
-    # first do normal StdDev calc
-    StdDev.SE(edhec)
-    # or the equivalent
-    StdDev.SE(edhec, portfolio_method="single")
-
-    # now with outliers squished
-    StdDev.SE(edhec, clean="boudt")
-
-    # add Component StdDev for the equal weighted portfolio
-    StdDev.SE(edhec, clean="boudt", portfolio_method="component")
-
-    # next use more than one method at the same time
-    h2o.init()
-    (res=StdDev.SE(edhec, se.method = c("IFiid","IFcor","BOOTiid","BOOTcor")))
-    h2o.shutdown(prompt=FALSE)
-    printSE(res)
-
-
-}
-\seealso{
-\code{\link{Return.clean}} \code{sd}
 }
 \author{
-@author Xin Chen, \email{chenx26@uw.edu}
+Xin Chen, \email{chenx26@uw.edu}
+
+Anthony-Alexander Christidis, \email{anthony.christidis@stat.ubc.ca}
 }

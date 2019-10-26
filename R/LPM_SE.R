@@ -1,37 +1,59 @@
-#' Wrapper function that computes LPM and the standard error of the estimate
+#' @title Standard Error Estimate for Lower Partial Moment (LPM) of Returns
 #'
-#' @param data data
-#' @param \dots any other passthru parameters. This include two types of parameters.
-#' The first type is parameters associated with the risk/performance measure, such as tail
-#' probability for VaR and ES. The second type is the parameters associated with the metohd
-#' used to compute the standard error. See \code{\link{SE.IF.iid}}, \code{\link{SE.IF.cor}},
-#' \code{\link{SE.BOOT.iid}}, \code{\link{SE.BOOT.cor}} for details.
-#' @param const constant threshold
-#' @param k order of the LPM, can only be 1 or 2 if se.method is not "none"
-#' @param se.method a character string indicating which method should be used to compute
-#' the standard error of the estimated standard deviation. One of \code{"none"} (default),
-#' \code{"IFiid"}, \code{"IFcor"}, \code{"BOOTiid"}, \code{"BOOTcor"}.
+#' @description \code{LPM.SE} computes the standard error of the LPM of the returns.
 #'
-#' @return a vector or a list depending on se.method
+#' @param data Data of returns for one or multiple assets or portfolios.
+#' @param k Range parameter for the shape of the IF (the SD gets multiplied k times).
+#' @param const Constant threshold.
+#' @param se.method A character string indicating which method should be used to compute
+#' the standard error of the estimated standard deviation. One or a combination of:
+#' \code{"IFiid"} (default), \code{"IFcor"} (default), \code{"IFcorAdapt"} (default),
+#' \code{"BOOTiid"}, \code{"BOOTcor"}, or \code{"none"}.
+#' @param prewhiten Boolean variable to indicate if the IF TS is pre-whitened (TRUE) or not (FALSE).
+#' @param cleanOutliers Boolean variable to indicate whether the pre-whitenning of the influence functions TS should be done through a robust filter.
+#' @param fitting.method Distribution used in the standard errors computation. Should be one of "Exponential" (default) or "Gamma".
+#' @param ... Additional parameters.
 #'
-#' @import PerformanceAnalytics
-#' @import RPEIF
+#' @return A vector or a list depending on \code{se.method}.
 #'
 #' @export
+#'
 #' @author Xin Chen, \email{chenx26@uw.edu}
-
-LPM.SE = function(data, ..., const = 0, k = 1, se.method = "none"){
+#' @author Anthony-Alexander Christidis, \email{anthony.christidis@stat.ubc.ca}
+#'
+#' @examples
+#' # Loading data from PerformanceAnalytics
+#' data(edhec, package = "PerformanceAnalytics")
+#' class(edhec)
+#' # Changing the data colnames
+#' names(edhec) = c("CA", "CTA", "DIS", "EM", "EMN",
+#'                  "ED", "FIA", "GM", "LS", "MA",
+#'                  "RV", "SS", "FOF")
+#' # Computing the standard errors for
+#' # the three influence functions based approaches
+#' LPM.SE(edhec, se.method=c("IFiid","IFcor","IFcorAdapt"),
+#'        prewhiten=FALSE, cleanOutliers=FALSE,
+#'        fitting.method=c("Exponential", "Gamma")[1])
+#'
+LPM.SE = function(data, const = 0, k = 1,
+                  se.method=c("IFiid","IFcor", "IFcorAdapt","BOOTiid","BOOTcor","none")[1:3],
+                  prewhiten=FALSE, cleanOutliers=FALSE, fitting.method=c("Exponential", "Gamma")[1],
+                  ...){
   data = checkData(data)
-  myLPM = apply(data, 2, LPM, const = const, k = k, ...)
-  names(myLPM) = colnames(data)
+  myLPM = t(apply(data, 2, LPM, const = const, k = k, ...))
+  rownames(myLPM) = "LPM"
   if(se.method[1] == "none" & length(se.method)==1){
     return(myLPM)
   } else {
     res=list(LPM=myLPM)
     # for each of the method specified in se.method, compute the standard error
     for(mymethod in se.method){
-      res[[mymethod]]=EstimatorSE(data, estimator.fun = "LPM",
-                                  se.method = mymethod, const = const, k = k, ...)
+      res[[mymethod]]=EstimatorSE(data, estimator.fun = "LPM", const = const, k = k,
+                                  se.method = mymethod,
+                                  prewhiten=prewhiten,
+                                  cleanOutliers=cleanOutliers,
+                                  fitting.method=fitting.method,
+                                  ...)
     }
     return(res)
   }

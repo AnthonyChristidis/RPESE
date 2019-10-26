@@ -1,31 +1,46 @@
-#' Wrapper function that computes VaRratio and the standard error of the estimate
+#' @title Standard Error Estimate for Value-at-Risk Ratio (VaRratio) of Returns
 #'
-#' @param data data
-#' @param \dots any other passthru parameters. This include two types of parameters.
-#' The first type is parameters associated with the risk/performance measure, such as tail
-#' probability for VaR and ES. The second type is the parameters associated with the metohd
-#' used to compute the standard error. See \code{\link{SE.IF.iid}}, \code{\link{SE.IF.cor}},
-#' \code{\link{SE.BOOT.iid}}, \code{\link{SE.BOOT.cor}} for details.
-#' @param alpha tail probability
-#' @param rf risk free rate
-#' @param se.method a character string indicating which method should be used to compute
-#' the standard error of the estimated standard deviation. One of \code{"none"} (default),
-#' \code{"IFiid"}, \code{"IFcor"}, \code{"BOOTiid"}, \code{"BOOTcor"}. Currently, it works
-#' only when \code{method="historical"} and \code{portfolio_method="single"}.
+#' @description \code{VaRratio.SE} computes the standard error of the value-at-risk ratio of the returns.
 #'
-#' @return a vector or a list depending on se.method
+#' @param data Data of returns for one or multiple assets or portfolios.
+#' @param alpha The tail probability of interest.
+#' @param rf Risk-free interest rate.
+#' @param se.method A character string indicating which method should be used to compute
+#' the standard error of the estimated standard deviation. One or a combination of:
+#' \code{"IFiid"} (default), \code{"IFcor"} (default), \code{"IFcorAdapt"} (default),
+#' \code{"BOOTiid"}, \code{"BOOTcor"}, or \code{"none"}.
+#' @param prewhiten Boolean variable to indicate if the IF TS is pre-whitened (TRUE) or not (FALSE).
+#' @param cleanOutliers Boolean variable to indicate whether the pre-whitenning of the influence functions TS should be done through a robust filter.
+#' @param fitting.method Distribution used in the standard errors computation. Should be one of "Exponential" (default) or "Gamma".
+#' @param ... Additional parameters.
 #'
-#' @import PerformanceAnalytics
-#' @import RPEIF
+#' @return A vector or a list depending on \code{se.method}.
 #'
 #' @export
+#'
 #' @author Anthony-Alexander Christidis, \email{anthony.christidis@stat.ubc.ca}
 #'
-
-VaRratio.SE = function(data, ..., alpha = 0.1, rf = 0, se.method = "none"){
+#' @examples
+#' # Loading data from PerformanceAnalytics
+#' data(edhec, package = "PerformanceAnalytics")
+#' class(edhec)
+#' # Changing the data colnames
+#' names(edhec) = c("CA", "CTA", "DIS", "EM", "EMN",
+#'                  "ED", "FIA", "GM", "LS", "MA",
+#'                  "RV", "SS", "FOF")
+#' # Computing the standard errors for
+#' # the three influence functions based approaches
+#' VaRratio.SE(edhec, se.method=c("IFiid","IFcor","IFcorAdapt"),
+#'             prewhiten=FALSE, cleanOutliers=FALSE,
+#'             fitting.method=c("Exponential", "Gamma")[1])
+#'
+VaRratio.SE <- function(data, alpha = 0.1, rf = 0,
+                        se.method=c("IFiid","IFcor", "IFcorAdapt","BOOTiid","BOOTcor","none")[1:3],
+                        prewhiten=FALSE, cleanOutliers=FALSE, fitting.method=c("Exponential", "Gamma")[1],
+                        ...){
   data = checkData(data)
-  myVaRratio = apply(data, 2, VaRratio, alpha = alpha, rf = rf, ...)
-  names(myVaRratio) = colnames(data)
+  myVaRratio = t(apply(data, 2, VaRratio, alpha = alpha, rf = rf, ...))
+  names(myVaRratio) = "VaRratio"
   if(se.method[1] == "none" & length(se.method)==1){
     return(myVaRratio)
   } else {
@@ -33,8 +48,12 @@ VaRratio.SE = function(data, ..., alpha = 0.1, rf = 0, se.method = "none"){
     # for each of the method specified in se.method, compute the standard error
     for(mymethod in se.method){
       res[[mymethod]]=EstimatorSE(data, estimator.fun = "VaRratio",
-                                  se.method = mymethod, alpha=alpha,
-                                  rf = rf, ...)
+                                  alpha=alpha, rf = rf,
+                                  se.method = mymethod,
+                                  prewhiten=prewhiten,
+                                  cleanOutliers=cleanOutliers,
+                                  fitting.method=fitting.method,
+                                  ...)
     }
     return(res)
   }

@@ -1,50 +1,22 @@
-###############################################################################
-# $Id$
-###############################################################################
-
-#' calculates Expected Shortfall(ES) (or Conditional Value-at-Risk(CVaR) for
-#' univariate and component, using a variety of analytical methods.
+#' @title Standard Error Estimate for Expected Shortfall (ES) of Returns
 #'
-#' Calculates Expected Shortfall(ES) (also known as) Conditional Value at
-#' Risk(CVaR) or Expected Tail Loss (ETL) for univariate, component,
-#' and marginal cases using a variety of analytical methods.
-#' The standard error of the estimates can also be computed by supplying the
-#' \code{se.method} parameter.
+#' @description \code{ES.SE} computes the standard error of the expected shortfall of the returns.
 #'
+#' @param data Data of returns for one or multiple assets or portfolios.
+#' @param p Confidence level for calculation. Default value is p=0.95.
+#' @param se.method A character string indicating which method should be used to compute
+#' the standard error of the estimated standard deviation. One or a combination of:
+#' \code{"IFiid"} (default), \code{"IFcor"} (default), \code{"IFcorAdapt"} (default),
+#' \code{"BOOTiid"}, \code{"BOOTcor"}, or \code{"none"}.
+#' @param prewhiten Boolean variable to indicate if the IF TS is pre-whitened (TRUE) or not (FALSE).
+#' @param cleanOutliers Boolean variable to indicate whether the pre-whitenning of the influence functions TS should be done through a robust filter.
+#' @param fitting.method Distribution used in the standard errors computation. Should be one of "Exponential" (default) or "Gamma".
+#' @param ... Additional parameters.
+#'
+#' @return A vector or a list depending on \code{se.method}.
 #'
 #' @export
-#' @aliases ES.SE CVaR.SE ETL.SE
-#' @rdname ES.SE
-#' @param R a vector, matrix, data frame, timeSeries or zoo object of asset
-#' returns
-#' @param p confidence level for calculation, default p=.95
-#' @param method one of "modified","gaussian","historical", see
-#' Details.
-#' @param clean method for data cleaning through \code{\link{Return.clean}}.
-#' Current options are "none", "boudt", or "geltner".
-#' @param portfolio_method one of "single","component","marginal" defining
-#' whether to do univariate, component, or marginal calc, see Details.
-#' @param weights portfolio weighting vector, default NULL, see Details
-#' @param mu If univariate, mu is the mean of the series. Otherwise mu is the
-#' vector of means of the return series , default NULL, , see Details
-#' @param sigma If univariate, sigma is the variance of the series. Otherwise
-#' sigma is the covariance matrix of the return series , default NULL, see
-#' Details
-#' @param m3 If univariate, m3 is the skewness of the series. Otherwise m3 is
-#' the coskewness matrix of the returns series, default NULL, see Details
-#' @param m4 If univariate, m4 is the excess kurtosis of the series. Otherwise
-#' m4 is the cokurtosis matrix of the return series, default NULL, see Details
-#' @param invert TRUE/FALSE whether to invert the VaR measure.  see Details.
-#' @param operational TRUE/FALSE, default TRUE, see Details.
-#' @param \dots any other passthru parameters. This include two types of parameters.
-#' The first type is parameters associated with the risk/performance measure, such as tail
-#' probability for VaR and ES. The second type is the parameters associated with the metohd
-#' used to compute the standard error. See \code{\link{SE.IF.iid}}, \code{\link{SE.IF.cor}},
-#' \code{\link{SE.BOOT.iid}}, \code{\link{SE.BOOT.cor}} for details.
-#' @param se.method a character string indicating which method should be used to compute
-#' the standard error of the estimated standard deviation. One of \code{"none"} (default),
-#' \code{"IFiid"}, \code{"IFcor"}, \code{"BOOTiid"}, \code{"BOOTcor"}. Currently, it works
-#' only when \code{method="historical"} and \code{portfolio_method="single"}.
+#'
 #' @note The option to \code{invert} the ES measure should appease both
 #' academics and practitioners.  The mathematical definition of ES as the
 #' negative value of extreme losses will (usually) produce a positive number.
@@ -54,6 +26,7 @@
 #' provide the option, and set the default to TRUE to keep the return
 #' consistent with prior versions of PerformanceAnalytics, but make no value
 #' judgement on which approach is preferable.
+#'
 #' @section Background: This function provides several estimation methods for
 #' the Expected Shortfall (ES) (also called Expected Tail Loss (ETL)
 #' or Conditional Value at Risk (CVaR)) of a return series and the Component ES
@@ -74,12 +47,9 @@
 #' decompose total portfolio ES into the risk contributions of each of the
 #' portfolio components. For the above mentioned ES estimators, such a
 #' decomposition is possible in a financially meaningful way.
-#' @author Xin Chen, \email{chenx26@uw.edu}
-#' @seealso \code{\link{VaR}} \cr \code{\link{SharpeRatio.modified}} \cr
-#' \code{\link{chart.VaRSensitivity}} \cr \code{\link{Return.clean}}
 #'
-#' @import PerformanceAnalytics
-#' @import RPEIF
+#' @author Xin Chen, \email{chenx26@uw.edu}
+#' @author Anthony-Alexander Christidis, \email{anthony.christidis@stat.ubc.ca}
 #'
 #' @references Boudt, Kris, Peterson, Brian, and Christophe Croux. 2008.
 #' Estimation and decomposition of downside risk for portfolios with non-normal
@@ -103,44 +73,33 @@
 #'
 #' Scaillet, Olivier. Nonparametric estimation and sensitivity analysis of
 #' expected shortfall. Mathematical Finance, 2002, vol. 14, 74-86.
-###keywords ts multivariate distribution models
+#'
 #' @examples
+#' # Loading data from PerformanceAnalytics
+#' data(edhec, package = "PerformanceAnalytics")
+#' class(edhec)
+#' # Changing the data colnames
+#' names(edhec) = c("CA", "CTA", "DIS", "EM", "EMN",
+#'                  "ED", "FIA", "GM", "LS", "MA",
+#'                  "RV", "SS", "FOF")
+#' # Computing the standard errors for
+#' # the three influence functions based approaches
+#' ES.SE(edhec, se.method=c("IFiid","IFcor","IFcorAdapt"),
+#'       prewhiten=FALSE, cleanOutliers=FALSE,
+#'       fitting.method=c("Exponential", "Gamma")[1])
 #'
-#'     data(edhec)
-#'
-#'     # use more than one method at the same time
-#'     h2o.init()
-#'     res=ES.SE(edhec, p=.95, method="historical",
-#'     se.method = c("IFiid","IFcor","BOOTiid","BOOTcor"))
-#'     # h2o.shutdown(prompt=FALSE)
-#'     printSE(res)
-#'
-#'     # now use Gaussian
-#'     ES.SE(edhec, p=.95, method="gaussian")
-#'
-#'     # now use modified Cornish Fisher calc to take non-normal distribution into account
-#'     ES.SE(edhec, p=.95, method="modified")
-#'
-#'     # now use p=.99
-#'     ES.SE(edhec, p=.99)
-#'     # or the equivalent alpha=.01
-#'     ES.SE(edhec, p=.01)
-#'
-#'     # now with outliers squished
-#'     ES.SE(edhec, clean="boudt")
-#'
-#'     # add Component ES for the equal weighted portfolio
-#'     ES.SE(edhec, clean="boudt", portfolio_method="component")
-#' @export ES.SE
-ES.SE <- function(R=NULL , p=0.95, ...,
-                  method=c("historical","gaussian","modified"),
-                  clean=c("none","boudt", "geltner"),
-                  portfolio_method=c("single","component"),
-                  weights=NULL, mu=NULL, sigma=NULL, m3=NULL, m4=NULL,
-                  invert=TRUE, operational=TRUE,
-                  se.method="none")
+ES.SE <- function(data, p=0.95,
+                  se.method=c("IFiid","IFcor", "IFcorAdapt","BOOTiid","BOOTcor","none")[1:3],
+                  prewhiten=FALSE, cleanOutliers=FALSE, fitting.method=c("Exponential", "Gamma")[1],
+                  ...)
 { # @author Brian G. Peterson and Xin Chen
 
+  # We force the following parameters
+  method=c("historical","gaussian","modified")[1]
+  clean=c("none","boudt", "geltner")[1]
+  portfolio_method=c("single","component")[1]
+  weights=NULL; mu=NULL; sigma=NULL; m3=NULL; m4=NULL
+  invert=TRUE; operational=TRUE
   # Descripion:
 
   # wrapper for univariate and multivariate ES functions.
@@ -148,7 +107,7 @@ ES.SE <- function(R=NULL , p=0.95, ...,
   # Setup:
   #if(exists(modified)({if( modified == TRUE) { method="modified" }}
   #if(method == TRUE or is.null(method) ) { method="modified" }
-  myES=ES(R=R , p=p, ...,
+  myES=ES(R=data , p=p, ...,
           method=method,
           clean=clean,
           portfolio_method=portfolio_method,
@@ -161,32 +120,32 @@ ES.SE <- function(R=NULL , p=0.95, ...,
   clean = clean[1]
   portfolio_method = portfolio_method[1]
   if(portfolio_method == "single" & is.null(weights) & method == "historical"){
-    if(!is.null(R)){
-      R <- checkData(R, method="xts", ...)
-      columns=colnames(R)
+    if(!is.null(data)){
+      data <- checkData(data, method="xts", ...)
+      columns=colnames(data)
       if (!is.null(weights) & portfolio_method != "single") {
-        if ( length(weights) != ncol(R)) {
-          stop("number of items in weights not equal to number of columns in R")
+        if ( length(weights) != ncol(data)) {
+          stop("number of items in weights not equal to number of columns in data")
         }
       }
       # weights = checkData(weights, method="matrix", ...) #is this necessary?
-      # TODO check for date overlap with R and weights
-      if(clean!="none" & is.null(mu)){ # the assumption here is that if you've passed in any moments, we'll leave R alone
-        R = as.matrix(PerformanceAnalytics::Return.clean(R, method=clean))
+      # TODO check for date overlap with data and weights
+      if(clean!="none" & is.null(mu)){ # the assumption here is that if you've passed in any moments, we'll leave data alone
+        data = as.matrix(PerformanceAnalytics::Return.clean(data, method=clean))
       }
       if(portfolio_method != "single"){
         # get the moments ready
-        if (is.null(mu)) { mu =  apply(R,2,'mean' ) }
-        if (is.null(sigma)) { sigma = cov(R) }
+        if (is.null(mu)) { mu =  apply(data,2,'mean' ) }
+        if (is.null(sigma)) { sigma = cov(data) }
         if(method=="modified"){
-          if (is.null(m3)) {m3 = M3.MM(R,mu=mu)}
-          if (is.null(m4)) {m4 = M4.MM(R,mu=mu)}
+          if (is.null(m3)) {m3 = M3.MM(data,mu=mu)}
+          if (is.null(m4)) {m4 = M4.MM(data,mu=mu)}
         }
       }
     } else {
-      #R is null, check for moments
-      if(is.null(mu)) stop("Nothing to do! You must pass either R or the moments mu, sigma, etc.")
-      if ( length(weights) != length(mu)) {
+      #data is null, check for moments
+      if(is.null(mu)) stop("Nothing to do! You must pass either data or the moments mu, sigma, etc.")
+      if (length(weights) != length(mu)) {
         stop("number of items in weights not equal to number of items in the mean vector")
       }
     }
@@ -196,21 +155,15 @@ ES.SE <- function(R=NULL , p=0.95, ...,
       res=list(ES=myES)
       # for each of the method specified in se.method, compute the standard error
       for(mymethod in se.method){
-        res[[mymethod]]=EstimatorSE(R, ..., estimator.fun = "ES", se.method = mymethod, alpha.ES = 1-p)
+        res[[mymethod]]=EstimatorSE(data, estimator.fun = "ES", alpha.ES = 1-p,
+                                    se.method = mymethod,
+                                    prewhiten=prewhiten,
+                                    cleanOutliers=cleanOutliers,
+                                    fitting.method=fitting.method,
+                                    ...)
       }
       return(res)
     }
   }
 } # end ES.SE wrapper function
 
-###############################################################################
-# R (http://r-project.org/) Econometrics for Performance and Risk Analysis
-#
-# Copyright (c) 2004-2015 Peter Carl and Brian G. Peterson
-#
-# This R package is distributed under the terms of the GNU Public License (GPL)
-# for full details see the file COPYING
-#
-# $Id$
-#
-###############################################################################

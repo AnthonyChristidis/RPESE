@@ -1,5 +1,8 @@
-#' calculate Sortino Ratio of performance over downside risk
+#' @title Standard Error Estimate for Sortino Ratio of Returns
 #'
+#' @description \code{SortinoRatio.SE} computes the standard error of the Sortino ratio of the returns.
+#'
+#' @details
 #' Sortino proposed an improvement on the Sharpe Ratio to better account for
 #' skill and excess performance by using only downside semivariance as the
 #' measure of risk.
@@ -19,43 +22,43 @@
 #' several standardized MAR values for reporting a range of scenarios, or a MAR
 #' customized to the objective of the investor.
 #'
-#' \deqn{ SortinoRatio=\frac{(\overline{R_{a} - MAR})}{\delta_{MAR}} } where
-#' \eqn{\delta_{MAR}} is the \code{\link{DownsideDeviation}}.
-#'
-#' @param R an xts, vector, matrix, data frame, timeSeries or zoo object of
-#' asset returns
-#' @param MAR Minimum Acceptable Return, in the same periodicity as your
-#' returns
+#' @param data Data of returns for one or multiple assets or portfolios.
+#' @param MAR Minimum Acceptable Return for threshold.
 #' @param threshold Parameter to determine whether we use a "mean" or "const" threshold.
-#' @param \dots any other passthru parameters. This include two types of parameters.
-#' The first type is parameters associated with the risk/performance measure, such as tail
-#' probability for VaR and ES. The second type is the parameters associated with the metohd
-#' used to compute the standard error. See \code{\link{SE.IF.iid}}, \code{\link{SE.IF.cor}},
-#' \code{\link{SE.BOOT.iid}}, \code{\link{SE.BOOT.cor}} for details.
-#' @param weights portfolio weighting vector, default NULL
-#' @param se.method a character string indicating which method should be used to compute
-#' the standard error of the estimated standard deviation. One of \code{"none"} (default),
-#' \code{"IFiid"}, \code{"IFcor"}, \code{"BOOTiid"}, \code{"BOOTcor"}. Currently, it works
-#' only when \code{method="historical"} and \code{portfolio_method="single"}.
-#' @author @author Xin Chen, \email{chenx26@uw.edu}
-#' @seealso \code{\link{SharpeRatio}} \cr \code{\link{DownsideDeviation}} \cr
-#' \code{\link{SemiVariance}} \cr \code{\link{SemiDeviation}} \cr
-#' \code{\link{InformationRatio}}
-#' @references Sortino, F. and Price, L. Performance Measurement in a Downside
-#' Risk Framework. \emph{Journal of Investing}. Fall 1994, 59-65.
-###keywords ts multivariate distribution models
-#' @examples
+#' @param se.method A character string indicating which method should be used to compute
+#' the standard error of the estimated standard deviation. One or a combination of:
+#' \code{"IFiid"} (default), \code{"IFcor"} (default), \code{"IFcorAdapt"} (default),
+#' \code{"BOOTiid"}, \code{"BOOTcor"}, or \code{"none"}.
+#' @param prewhiten Boolean variable to indicate if the IF TS is pre-whitened (TRUE) or not (FALSE).
+#' @param cleanOutliers Boolean variable to indicate whether the pre-whitenning of the influence functions TS should be done through a robust filter.
+#' @param fitting.method Distribution used in the standard errors computation. Should be one of "Exponential" (default) or "Gamma".
+#' @param ... Additional parameters.
 #'
-#' data(managers)
-#' round(SortinoRatio(managers[, 1]),4)
-#' round(SortinoRatio(managers[, 1:8]),4)
-#'
-#' @import PerformanceAnalytics
-#' @import RPEIF
+#' @return A vector or a list depending on \code{se.method}.
 #'
 #' @export
-SortinoRatio.SE <-
-  function (R, ..., weights=NULL, se.method = "none", MAR = 0, threshold = c("mean", "const")[1])
+#'
+#' @author Xin Chen, \email{chenx26@uw.edu}
+#' @author Anthony-Alexander Christidis, \email{anthony.christidis@stat.ubc.ca}
+#'
+#' @examples
+#' # Loading data from PerformanceAnalytics
+#' data(edhec, package = "PerformanceAnalytics")
+#' class(edhec)
+#' # Changing the data colnames
+#' names(edhec) = c("CA", "CTA", "DIS", "EM", "EMN",
+#'                  "ED", "FIA", "GM", "LS", "MA",
+#'                  "RV", "SS", "FOF")
+#' # Computing the standard errors for
+#' # the three influence functions based approaches
+#' SortinoRatio.SE(edhec[,"CA"], se.method=c("IFiid","IFcor","IFcorAdapt"),
+#'                 prewhiten=FALSE, cleanOutliers=FALSE,
+#'                 fitting.method=c("Exponential", "Gamma")[1])
+#'
+SortinoRatio.SE <- function (data, MAR = 0, threshold = c("mean", "const")[1],
+                             se.method=c("IFiid","IFcor", "IFcorAdapt","BOOTiid","BOOTcor","none")[1:3],
+                             prewhiten=FALSE, cleanOutliers=FALSE, fitting.method=c("Exponential", "Gamma")[1],
+                             ...)
   { # @author Brian G. Peterson and Xin Chen
     # modified from function by Sankalp Upadhyay <sankalp.upadhyay [at] gmail [dot] com> with permission
 
@@ -63,24 +66,32 @@ SortinoRatio.SE <-
     # Sortino proposed to better account for skill and excess peRformance
     # by using only downside semivariance as the measure of risk.
 
-    # R     return vector
+    # data     return vector
     # MAR   minimum acceptable return
     # Function:
 
-    mySoR = SortinoRatio(R = R,  ..., weights = weights, MAR = MAR)
+    # Forcing the following parameters
+    weights = NULL
 
-    R = checkData(R)
+    mySoR = SortinoRatio(R = data, weights = weights, MAR = MAR)
+
+    data = checkData(data)
 
     #if we have a weights vector, use it
     if(!is.null(weights)){
-      R=Return.portfolio(R,weights,...)
+      data=Return.portfolio(data,weights,...)
     }
 
     if(se.method[1]!="none"){
       res=list(SoR=mySoR)
       # for each of the method specified in se.method, compute the standard error
       for(mymethod in se.method){
-        res[[mymethod]]=EstimatorSE(R, estimator.fun = "SoR", se.method = mymethod, const = MAR, threshold=threshold, MAR = MAR, ...)
+        res[[mymethod]]=EstimatorSE(data, estimator.fun = "SoR", const = MAR, threshold=threshold, MAR = MAR,
+                                    se.method = mymethod,
+                                    prewhiten=prewhiten,
+                                    cleanOutliers=cleanOutliers,
+                                    fitting.method=fitting.method,
+                                    ...)
       }
       return(res)
     } else {
@@ -89,14 +100,3 @@ SortinoRatio.SE <-
 
   }
 
-###############################################################################
-# R (http://r-project.org/) Econometrics for Performance and Risk Analysis
-#
-# Copyright (c) 2004-2015 Peter Carl and Brian G. Peterson
-#
-# This R package is distributed under the terms of the GNU Public License (GPL)
-# for full details see the file COPYING
-#
-# $Id$
-#
-###############################################################################

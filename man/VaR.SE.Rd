@@ -2,60 +2,36 @@
 % Please edit documentation in R/VaR_SE.R
 \name{VaR.SE}
 \alias{VaR.SE}
-\alias{VaR.CornishFisher.SE}
-\title{calculate various Value at Risk (VaR) measures}
+\title{Standard Error Estimate for Value-at-Risk (VaR) of Returns}
 \usage{
-VaR.SE(R = NULL, p = 0.95, ..., method = c("modified", "gaussian",
-  "historical", "kernel"), clean = c("none", "boudt", "geltner"),
-  portfolio_method = c("single", "component", "marginal"),
-  weights = NULL, mu = NULL, sigma = NULL, m3 = NULL, m4 = NULL,
-  invert = TRUE, se.method = "none")
+VaR.SE(data = NULL, p = 0.95, se.method = c("IFiid", "IFcor",
+  "IFcorAdapt", "BOOTiid", "BOOTcor", "none")[1:3], prewhiten = FALSE,
+  cleanOutliers = FALSE, fitting.method = c("Exponential", "Gamma")[1],
+  ...)
 }
 \arguments{
-\item{R}{an xts, vector, matrix, data frame, timeSeries or zoo object of
-asset returns}
+\item{data}{Data of returns for one or multiple assets or portfolios.}
 
-\item{p}{confidence level for calculation, default p=.95}
+\item{p}{Confidence level for calculation. Default is p=0.95.}
 
-\item{\dots}{any other passthru parameters. This include two types of parameters.
-The first type is parameters associated with the risk/performance measure, such as tail
-probability for VaR and ES. The second type is the parameters associated with the metohd
-used to compute the standard error. See \code{\link{SE.IF.iid}}, \code{\link{SE.IF.cor}},
-\code{\link{SE.BOOT.iid}}, \code{\link{SE.BOOT.cor}} for details.}
+\item{se.method}{A character string indicating which method should be used to compute
+the standard error of the estimated standard deviation. One or a combination of:
+\code{"IFiid"} (default), \code{"IFcor"} (default), \code{"IFcorAdapt"} (default),
+\code{"BOOTiid"}, \code{"BOOTcor"}, or \code{"none"}.}
 
-\item{method}{one of "modified","gaussian","historical", "kernel", see
-Details.}
+\item{prewhiten}{Boolean variable to indicate if the IF TS is pre-whitened (TRUE) or not (FALSE).}
 
-\item{clean}{method for data cleaning through \code{\link{Return.clean}}.
-Current options are "none", "boudt", or "geltner".}
+\item{cleanOutliers}{Boolean variable to indicate whether the pre-whitenning of the influence functions TS should be done through a robust filter.}
 
-\item{portfolio_method}{one of "single","component","marginal" defining
-whether to do univariate, component, or marginal calc, see Details.}
+\item{fitting.method}{Distribution used in the standard errors computation. Should be one of "Exponential" (default) or "Gamma".}
 
-\item{weights}{portfolio weighting vector, default NULL, see Details}
-
-\item{mu}{If univariate, mu is the mean of the series. Otherwise mu is the
-vector of means of the return series , default NULL, , see Details}
-
-\item{sigma}{If univariate, sigma is the variance of the series. Otherwise
-sigma is the covariance matrix of the return series , default NULL, see
-Details}
-
-\item{m3}{If univariate, m3 is the skewness of the series. Otherwise m3 is
-the coskewness matrix of the returns series, default NULL, see Details}
-
-\item{m4}{If univariate, m4 is the excess kurtosis of the series. Otherwise
-m4 is the cokurtosis matrix of the return series, default NULL, see Details}
-
-\item{invert}{TRUE/FALSE whether to invert the VaR measure.  see Details.}
-
-\item{se.method}{a character string indicating which method should be used to compute
-the standard error of the estimated standard deviation. One of \code{"none"} (default),
-\code{"IFiid"}, \code{"IFcor"}, \code{"BOOTiid"}, \code{"BOOTcor"}}
+\item{...}{Additional parameters.}
+}
+\value{
+A vector or a list depending on \code{se.method}.
 }
 \description{
-Calculates Value-at-Risk(VaR) for univariate, component, and marginal cases
-using a variety of analytical methods.
+\code{VaR.SE} computes the standard error of the value-at-risk of the returns.
 }
 \note{
 The option to \code{invert} the VaR measure should appease both
@@ -92,28 +68,18 @@ decomposition is possible in a financially meaningful way.
 }
 
 \examples{
-
-    data(edhec)
-
-    # first do normal VaR calc
-    VaR.SE(edhec, p=.95, method="historical")
-
-    # now use Gaussian
-    VaR.SE(edhec, p=.95, method="gaussian")
-
-    # now use modified Cornish Fisher calc to take non-normal distribution into account
-    VaR.SE(edhec, p=.95, method="modified")
-
-    # now use p=.99
-    VaR.SE(edhec, p=.99)
-    # or the equivalent alpha=.01
-    VaR.SE(edhec, p=.01)
-
-    # now with outliers squished
-    VaR.SE(edhec, clean="boudt")
-
-    # add Component VaR for the equal weighted portfolio
-    VaR.SE(edhec, clean="boudt", portfolio_method="component")
+# Loading data from PerformanceAnalytics
+data(edhec, package = "PerformanceAnalytics")
+class(edhec)
+# Changing the data colnames
+names(edhec) = c("CA", "CTA", "DIS", "EM", "EMN",
+                 "ED", "FIA", "GM", "LS", "MA",
+                 "RV", "SS", "FOF")
+# Computing the standard errors for
+# the three influence functions based approaches
+VaR.SE(edhec, se.method=c("IFiid","IFcor","IFcorAdapt"),
+       prewhiten=FALSE, cleanOutliers=FALSE,
+       fitting.method=c("Exponential", "Gamma")[1])
 
 }
 \references{
@@ -167,11 +133,6 @@ Yamai and Yoshiba (2002). "Comparative Analyses of Expected Shortfall and
    Value-at-Risk: Their Estimation Error, Decomposition, and Optimization",
    Bank of Japan.
 }
-\seealso{
-\code{\link{SharpeRatio.modified}} \cr
-\code{\link{chart.VaRSensitivity}} \cr
-\code{\link{Return.clean}}
-}
 \author{
-Xin Chen, \email{chenx26@uw.edu}
+Anthony-Alexander Christidis, \email{anthony.christidis@stat.ubc.ca}
 }

@@ -2,33 +2,56 @@
 % Please edit documentation in R/LPM_SE.R
 \name{LPM.SE}
 \alias{LPM.SE}
-\title{Wrapper function that computes LPM and the standard error of the estimate}
+\title{Standard Error Estimate for Lower Partial Moment (LPM) of Returns}
 \usage{
-LPM.SE(data, ..., const = 0, k = 1, se.method = "none")
+LPM.SE(data, const = 0, k = 1, se.method = c("IFiid", "IFcor",
+  "IFcorAdapt", "BOOTiid", "BOOTcor", "none")[1:3], prewhiten = FALSE,
+  cleanOutliers = FALSE, fitting.method = c("Exponential", "Gamma")[1],
+  ...)
 }
 \arguments{
-\item{data}{data}
+\item{data}{Data of returns for one or multiple assets or portfolios.}
 
-\item{\dots}{any other passthru parameters. This include two types of parameters.
-The first type is parameters associated with the risk/performance measure, such as tail
-probability for VaR and ES. The second type is the parameters associated with the metohd
-used to compute the standard error. See \code{\link{SE.IF.iid}}, \code{\link{SE.IF.cor}},
-\code{\link{SE.BOOT.iid}}, \code{\link{SE.BOOT.cor}} for details.}
+\item{const}{Constant threshold.}
 
-\item{const}{constant threshold}
+\item{k}{Range parameter for the shape of the IF (the SD gets multiplied k times).}
 
-\item{k}{order of the LPM, can only be 1 or 2 if se.method is not "none"}
+\item{se.method}{A character string indicating which method should be used to compute
+the standard error of the estimated standard deviation. One or a combination of:
+\code{"IFiid"} (default), \code{"IFcor"} (default), \code{"IFcorAdapt"} (default),
+\code{"BOOTiid"}, \code{"BOOTcor"}, or \code{"none"}.}
 
-\item{se.method}{a character string indicating which method should be used to compute
-the standard error of the estimated standard deviation. One of \code{"none"} (default),
-\code{"IFiid"}, \code{"IFcor"}, \code{"BOOTiid"}, \code{"BOOTcor"}.}
+\item{prewhiten}{Boolean variable to indicate if the IF TS is pre-whitened (TRUE) or not (FALSE).}
+
+\item{cleanOutliers}{Boolean variable to indicate whether the pre-whitenning of the influence functions TS should be done through a robust filter.}
+
+\item{fitting.method}{Distribution used in the standard errors computation. Should be one of "Exponential" (default) or "Gamma".}
+
+\item{...}{Additional parameters.}
 }
 \value{
-a vector or a list depending on se.method
+A vector or a list depending on \code{se.method}.
 }
 \description{
-Wrapper function that computes LPM and the standard error of the estimate
+\code{LPM.SE} computes the standard error of the LPM of the returns.
+}
+\examples{
+# Loading data from PerformanceAnalytics
+data(edhec, package = "PerformanceAnalytics")
+class(edhec)
+# Changing the data colnames
+names(edhec) = c("CA", "CTA", "DIS", "EM", "EMN",
+                 "ED", "FIA", "GM", "LS", "MA",
+                 "RV", "SS", "FOF")
+# Computing the standard errors for
+# the three influence functions based approaches
+LPM.SE(edhec, se.method=c("IFiid","IFcor","IFcorAdapt"),
+       prewhiten=FALSE, cleanOutliers=FALSE,
+       fitting.method=c("Exponential", "Gamma")[1])
+
 }
 \author{
 Xin Chen, \email{chenx26@uw.edu}
+
+Anthony-Alexander Christidis, \email{anthony.christidis@stat.ubc.ca}
 }

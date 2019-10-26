@@ -1,6 +1,0 @@
-#' edhec documentation here
-#'
-
-"edhec"
-
-

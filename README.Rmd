@@ -1,8 +1,19 @@
+---
+output: github_document
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
 
 [![Build Status](https://travis-ci.org/AnthonyChristidis/RPESE.svg?branch=master)](https://travis-ci.com/AnthonyChristidis/RPESE) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/RPESE)](https://cran.r-project.org/package=RPESE) [![Downloads](http://cranlogs.r-pkg.org/badges/RPESE)](https://cran.r-project.org/package=RPESE)
 
 RPESE
-=====
+==========
 
 This package provides functions for computing standared error estimates for risk and performance measures of asset or portfolio returns.
 
@@ -12,7 +23,7 @@ This package provides functions for computing standared error estimates for risk
 
 You can install the **stable** version on [R CRAN](https://cran.r-project.org/package=RPESE).
 
-``` r
+```{r installation, eval = FALSE}
 install.packages("RPESE", dependencies = TRUE)
 ```
 
