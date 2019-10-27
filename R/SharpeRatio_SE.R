@@ -61,8 +61,8 @@ SharpeRatio.SE <- function (data, Rf = 0, p = 0.95,
     weights=NULL
     annualize = FALSE
 
-    mySR = SR(data = data, rf = Rf, ...)
-
+    mySR = t(apply(data, 2, SR, rf = Rf, ...))
+    rownames(mySR) = "SharpeRatio"
 
     if(length(FUN)==1 & FUN=="StdDev" & is.null(weights) & annualize == FALSE & se.method[1]!="none"){
 

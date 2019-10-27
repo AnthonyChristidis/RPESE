@@ -73,9 +73,8 @@ SortinoRatio.SE <- function (data, MAR = 0, threshold = c("mean", "const")[1],
     # Forcing the following parameters
     weights = NULL
 
-    mySoR = SortinoRatio(R = data, weights = weights, MAR = MAR)
-
-    data = checkData(data)
+    mySoR = t(apply(data, 2, SoR, threshold = threshold, MAR = MAR))
+    rownames(mySoR) = "SortinoRatio"
 
     #if we have a weights vector, use it
     if(!is.null(weights)){
