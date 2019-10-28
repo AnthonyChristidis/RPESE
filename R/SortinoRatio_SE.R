@@ -27,7 +27,7 @@
 #' @param threshold Parameter to determine whether we use a "mean" or "const" threshold.
 #' @param se.method A character string indicating which method should be used to compute
 #' the standard error of the estimated standard deviation. One or a combination of:
-#' \code{"IFiid"} (default), \code{"IFcor"} (default), \code{"IFcorAdapt"} (default),
+#' \code{"IFiid"} (default), \code{"IFcor"}, \code{"IFcorAdapt"} (default),
 #' \code{"BOOTiid"}, \code{"BOOTcor"}, or \code{"none"}.
 #' @param prewhiten Boolean variable to indicate if the IF TS is pre-whitened (TRUE) or not (FALSE).
 #' @param cleanOutliers Boolean variable to indicate whether the pre-whitenning of the influence functions TS should be done through a robust filter.
@@ -51,12 +51,12 @@
 #'                  "RV", "SS", "FOF")
 #' # Computing the standard errors for
 #' # the three influence functions based approaches
-#' SortinoRatio.SE(edhec[,"CA"], se.method=c("IFiid","IFcor","IFcorAdapt"),
+#' SortinoRatio.SE(edhec[,"CA"], se.method=c("IFiid","IFcorAdapt"),
 #'                 prewhiten=FALSE, cleanOutliers=FALSE,
 #'                 fitting.method=c("Exponential", "Gamma")[1])
 #'
 SortinoRatio.SE <- function (data, MAR = 0, threshold = c("mean", "const")[1],
-                             se.method=c("IFiid","IFcor", "IFcorAdapt","BOOTiid","BOOTcor","none")[1:3],
+                             se.method=c("IFiid","IFcor", "IFcorAdapt","BOOTiid","BOOTcor","none")[1,3],
                              prewhiten=FALSE, cleanOutliers=FALSE, fitting.method=c("Exponential", "Gamma")[1],
                              ...)
   { # @author Brian G. Peterson and Xin Chen

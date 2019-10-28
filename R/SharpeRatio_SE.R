@@ -20,10 +20,9 @@
 #'
 #' @param data Data of returns for one or multiple assets or portfolios.
 #' @param Rf Risk free rate.
-#' @param p Confidence level for calculation. Default is p=0.95.
 #' @param se.method A character string indicating which method should be used to compute
 #' the standard error of the estimated standard deviation. One or a combination of:
-#' \code{"IFiid"} (default), \code{"IFcor"} (default), \code{"IFcorAdapt"} (default),
+#' \code{"IFiid"} (default), \code{"IFcor"}, \code{"IFcorAdapt"} (default),
 #' \code{"BOOTiid"}, \code{"BOOTcor"}, or \code{"none"}.
 #' @param prewhiten Boolean variable to indicate if the IF TS is pre-whitened (TRUE) or not (FALSE).
 #' @param cleanOutliers Boolean variable to indicate whether the pre-whitenning of the influence functions TS should be done through a robust filter.
@@ -47,12 +46,12 @@
 #'                  "RV", "SS", "FOF")
 #' # Computing the standard errors for
 #' # the three influence functions based approaches
-#' SharpeRatio.SE(edhec, se.method=c("IFiid","IFcor","IFcorAdapt"),
+#' SharpeRatio.SE(edhec, se.method=c("IFiid","IFcorAdapt"),
 #'                prewhiten=FALSE, cleanOutliers=FALSE,
 #'                fitting.method=c("Exponential", "Gamma")[1])
 #'
-SharpeRatio.SE <- function (data, Rf = 0, p = 0.95,
-                            se.method=c("IFiid","IFcor", "IFcorAdapt","BOOTiid","BOOTcor","none")[1:3],
+SharpeRatio.SE <- function (data, Rf = 0,
+                            se.method=c("IFiid","IFcor", "IFcorAdapt","BOOTiid","BOOTcor","none")[1,3],
                             prewhiten=FALSE, cleanOutliers=FALSE, fitting.method=c("Exponential", "Gamma")[1],
                             ...){
 

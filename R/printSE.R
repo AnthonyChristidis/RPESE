@@ -4,7 +4,7 @@
 #'
 #' @param SE.data Standard error estimates output from RPESE functions.
 #' @param round.digit Number of digits for rounding.
-#' @param val.only Confidence level for calculation. Default is p=0.95.
+#' @param round.out Round data (TRUE) with round.digit number of digits. Default is TRUE.
 #'
 #' @return A data frame with formatted output from standard error functions from \code{RPESE}.
 #'
@@ -29,7 +29,7 @@
 #' # Print the output
 #' printSE(ES.out)
 #'
-printSE <- function(SE.data, round.digit = 3, val.only = TRUE){
+printSE <- function(SE.data, round.digit = 3, round.out = TRUE){
   N = length(SE.data)
   # if(N != 2) {
   #   cat("the SE.dataults do not contain standard errors!\n")
@@ -44,9 +44,9 @@ printSE <- function(SE.data, round.digit = 3, val.only = TRUE){
   rownames(SE.data.df) = colnames(SE.data[[1]])
 #  SE.data.df = round(SE.data.df, digits = round.digit)
   if(val.only){
-    return(SE.data.df)
+    return(print(SE.data.df, digits = round.digit))
   }
-  print(SE.data.df, digits = round.digit)
+  return(SE.data.df)
   # SE.data.df[2] = paste("(",SE.data.df[,2],")",sep="")
   # SE.data.df[,-1] = apply(as.data.frame(SE.data.df[,-1]),2,function(x) paste("(",x,")",sep=""))
 
