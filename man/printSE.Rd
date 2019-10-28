@@ -4,14 +4,14 @@
 \alias{printSE}
 \title{Formatted Output for Standard Errors Functions in RPESE}
 \usage{
-printSE(SE.data, round.digit = 3, val.only = TRUE)
+printSE(SE.data, round.digit = 3, round.out = TRUE)
 }
 \arguments{
 \item{SE.data}{Standard error estimates output from RPESE functions.}
 
 \item{round.digit}{Number of digits for rounding.}
 
-\item{val.only}{Confidence level for calculation. Default is p=0.95.}
+\item{round.out}{Round data (TRUE) with round.digit number of digits. Default is TRUE.}
 }
 \value{
 A data frame with formatted output from standard error functions from \code{RPESE}.
