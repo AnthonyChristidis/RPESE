@@ -29,7 +29,7 @@ names(edhec) = c("CA", "CTA", "DIS", "EM", "EMN",
                  "RV", "SS", "FOF")
 # Computing the standard errors for
 # the three influence functions based approaches
-ES.out <- ES.SE(edhec, se.method=c("IFiid","IFcor","IFcorAdapt"),
+ES.out <- ES.SE(edhec, se.method=c("IFiid","IFcor"),
                 prewhiten=FALSE, cleanOutliers=FALSE,
                 fitting.method=c("Exponential", "Gamma")[1])
 # Print the output
