@@ -44,7 +44,7 @@ printSE <- function(SE.data, round.digit = 3, round.out = TRUE){
   rownames(SE.data.df) = colnames(SE.data[[1]])
 #  SE.data.df = round(SE.data.df, digits = round.digit)
   if(round.out){
-    return(print(SE.data.df, digits = round.digit))
+    return(round(SE.data.df, digits = round.digit))
   }
   return(SE.data.df)
   # SE.data.df[2] = paste("(",SE.data.df[,2],")",sep="")
