@@ -6,7 +6,7 @@
 #' @param rf Risk-free interest rate.
 #' @param se.method A character string indicating which method should be used to compute
 #' the standard error of the estimated standard deviation. One or a combination of:
-#' \code{"IFiid"} (default), \code{"IFcor"} (default), \code{"IFcorAdapt"} (default),
+#' \code{"IFiid"} (default), \code{"IFcor"} (default), \code{"IFcorAdapt"},
 #' \code{"BOOTiid"}, \code{"BOOTcor"}, or \code{"none"}.
 #' @param prewhiten Boolean variable to indicate if the IF TS is pre-whitened (TRUE) or not (FALSE).
 #' @param cleanOutliers Boolean variable to indicate whether the pre-whitenning of the influence functions TS should be done through a robust filter.
@@ -29,12 +29,12 @@
 #'                  "RV", "SS", "FOF")
 #' # Computing the standard errors for
 #' # the three influence functions based approaches
-#' SemiSD.SE(edhec, se.method=c("IFiid","IFcor","IFcorAdapt"),
+#' SemiSD.SE(edhec, se.method=c("IFiid","IFcor"),
 #'           prewhiten=FALSE, cleanOutliers=FALSE,
 #'           fitting.method=c("Exponential", "Gamma")[1])
 #'
 SemiSD.SE <- function(data, rf=0,
-                      se.method=c("IFiid","IFcor", "IFcorAdapt","BOOTiid","BOOTcor","none")[1:3],
+                      se.method=c("IFiid","IFcor", "IFcorAdapt","BOOTiid","BOOTcor","none")[1,2],
                       prewhiten=FALSE, cleanOutliers=FALSE, fitting.method=c("Exponential", "Gamma")[1],
                       ...){
   data = checkData(data)
