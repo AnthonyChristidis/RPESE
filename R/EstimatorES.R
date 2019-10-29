@@ -3,11 +3,9 @@
 #' @import PerformanceAnalytics
 #' @import RPEGLMEN
 #' @importFrom stats cov quantile SSD arima lm coef ar na.omit fft
-#' @import boot
-#' @import robustbase
-#' @import sandwich
-#' @import xts
-#' @import zoo
+#' @importFrom boot boot tsboot
+#' @importFrom xts is.xts
+#' @importFrom zoo zoo
 #'
 #' @title Wrapper Function for Standard Errors Estimates Functions
 #'

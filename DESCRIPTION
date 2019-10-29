@@ -14,11 +14,15 @@ License: GPL (>= 2)
 Imports:
     RPEIF,
     RPEGLMEN,
-    PerformanceAnalytics
+    PerformanceAnalytics,
+    xts, 
+    zoo, 
+    robustbase, 
+    boot, 
+    sandwich
 Suggests:
     testthat, R.rsp
 Depends:
-    xts, zoo, robustbase, boot, sandwich
 RoxygenNote: 6.1.1
 VignetteBuilder: R.rsp
 LazyData: true
