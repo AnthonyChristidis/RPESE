@@ -2,7 +2,7 @@
 #' @import RPEIF
 #' @import PerformanceAnalytics
 #' @import RPEGLMEN
-#' @import stats
+#' @importFrom stats cov quantile SSD arima lm coef ar na.omit fft
 #' @import boot
 #' @import robustbase
 #' @import sandwich
