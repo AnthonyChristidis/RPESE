@@ -5,7 +5,7 @@
 \title{Standard Error Estimate for Omega Ratio of Returns}
 \usage{
 OmegaRatio.SE(data, const = 0, k = 4, se.method = c("IFiid", "IFcor",
-  "IFcorPW", "IFcorAdapt", "BOOTiid", "BOOTcor")[c(1, 4)],
+  "IFcorAdapt", "IFcorPW", "BOOTiid", "BOOTcor")[c(1, 3)],
   cleanOutliers = FALSE, fitting.method = c("Exponential", "Gamma")[1],
   ...)
 }

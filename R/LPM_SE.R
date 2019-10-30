@@ -35,7 +35,7 @@
 #'        fitting.method=c("Exponential", "Gamma")[1])
 #'
 LPM.SE = function(data, const = 0, k = 1,
-                  se.method=c("IFiid","IFcor","IFcorPW","IFcorAdapt","BOOTiid","BOOTcor")[1:2],
+                  se.method=c("IFiid","IFcor","IFcorAdapt","IFcorPW","BOOTiid","BOOTcor")[1:2],
                   cleanOutliers=FALSE, fitting.method=c("Exponential", "Gamma")[1],
                   ...){
   data = checkData(data)

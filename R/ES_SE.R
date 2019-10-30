@@ -88,7 +88,7 @@
 #'       fitting.method=c("Exponential", "Gamma")[1])
 #'
 ES.SE <- function(data, p=0.95,
-                  se.method=c("IFiid","IFcor","IFcorPW","IFcorAdapt","BOOTiid","BOOTcor")[1:2],
+                  se.method=c("IFiid","IFcor","IFcorAdapt","IFcorPW","BOOTiid","BOOTcor")[1:2],
                   cleanOutliers=FALSE, fitting.method=c("Exponential", "Gamma")[1],
                   ...)
 { # @author Brian G. Peterson and Xin Chen

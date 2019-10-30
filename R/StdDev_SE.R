@@ -33,7 +33,7 @@
 #'           fitting.method=c("Exponential", "Gamma")[1])
 #'
 StdDev.SE <- function(data,
-                      se.method=c("IFiid","IFcor","IFcorPW","IFcorAdapt","BOOTiid","BOOTcor")[1:2],
+                      se.method=c("IFiid","IFcor","IFcorAdapt","IFcorPW","BOOTiid","BOOTcor")[1:2],
                       cleanOutliers=FALSE, fitting.method=c("Exponential", "Gamma")[1],
                       ...){
 

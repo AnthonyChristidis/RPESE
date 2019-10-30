@@ -4,9 +4,10 @@
 \alias{SharpeRatio.SE}
 \title{Standard Error Estimate for Sharpe Ratio of Returns}
 \usage{
-SharpeRatio.SE(data, Rf = 0, se.method = c("IFiid", "IFcor", "IFcorPW",
-  "IFcorAdapt", "BOOTiid", "BOOTcor")[c(1, 4)], cleanOutliers = FALSE,
-  fitting.method = c("Exponential", "Gamma")[1], ...)
+SharpeRatio.SE(data, Rf = 0, se.method = c("IFiid", "IFcor",
+  "IFcorAdapt", "IFcorPW", "BOOTiid", "BOOTcor")[c(1, 3)],
+  cleanOutliers = FALSE, fitting.method = c("Exponential", "Gamma")[1],
+  ...)
 }
 \arguments{
 \item{data}{Data of returns for one or multiple assets or portfolios.}

@@ -5,7 +5,7 @@
 \title{Standard Error Estimate for Lower Partial Moment (LPM) of Returns}
 \usage{
 LPM.SE(data, const = 0, k = 1, se.method = c("IFiid", "IFcor",
-  "IFcorPW", "IFcorAdapt", "BOOTiid", "BOOTcor")[1:2],
+  "IFcorAdapt", "IFcorPW", "BOOTiid", "BOOTcor")[1:2],
   cleanOutliers = FALSE, fitting.method = c("Exponential", "Gamma")[1],
   ...)
 }

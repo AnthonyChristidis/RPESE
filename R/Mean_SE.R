@@ -31,7 +31,7 @@
 #'         cleanOutliers=FALSE,
 #'         fitting.method=c("Exponential", "Gamma")[1])
 #'
-Mean.SE <- function(data, se.method=c("IFiid","IFcor","IFcorPW","IFcorAdapt","BOOTiid","BOOTcor")[c(1,4)],
+Mean.SE <- function(data, se.method=c("IFiid","IFcor","IFcorAdapt","IFcorPW","BOOTiid","BOOTcor")[c(1,3)],
                     cleanOutliers=FALSE, fitting.method=c("Exponential", "Gamma")[1],
                     ...){
   data = checkData(data)

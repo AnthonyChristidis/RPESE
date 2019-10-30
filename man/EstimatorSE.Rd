@@ -6,8 +6,8 @@
 \usage{
 EstimatorSE(data, estimator.fun = c("Mean", "SD", "VaR", "ES", "SR",
   "SoR", "ESratio", "VaRratio", "SoR", "LPM", "OmegaRatio", "SemiSD",
-  "RachevRatio"), se.method = c("IFiid", "IFcor", "IFcorPW",
-  "IFcorAdapt", "BOOTiid", "BOOTcor"), cleanOutliers = FALSE,
+  "RachevRatio"), se.method = c("IFiid", "IFcor", "IFcorAdapt",
+  "IFcorPW", "BOOTiid", "BOOTcor"), cleanOutliers = FALSE,
   fitting.method = c("Exponential", "Gamma")[1], a = 0.3, b = 0.7,
   ...)
 }

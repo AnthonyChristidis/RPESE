@@ -50,7 +50,7 @@
 #'                fitting.method=c("Exponential", "Gamma")[1])
 #'
 SharpeRatio.SE <- function (data, Rf = 0,
-                            se.method=c("IFiid","IFcor","IFcorPW","IFcorAdapt","BOOTiid","BOOTcor")[c(1,4)],
+                            se.method=c("IFiid","IFcor","IFcorAdapt","IFcorPW","BOOTiid","BOOTcor")[c(1,3)],
                             cleanOutliers=FALSE, fitting.method=c("Exponential", "Gamma")[1],
                             ...){
 

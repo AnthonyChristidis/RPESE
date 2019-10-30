@@ -4,8 +4,8 @@
 \alias{Mean.SE}
 \title{Standard Error Estimate for Mean of Returns}
 \usage{
-Mean.SE(data, se.method = c("IFiid", "IFcor", "IFcorPW", "IFcorAdapt",
-  "BOOTiid", "BOOTcor")[c(1, 4)], cleanOutliers = FALSE,
+Mean.SE(data, se.method = c("IFiid", "IFcor", "IFcorAdapt", "IFcorPW",
+  "BOOTiid", "BOOTcor")[c(1, 3)], cleanOutliers = FALSE,
   fitting.method = c("Exponential", "Gamma")[1], ...)
 }
 \arguments{

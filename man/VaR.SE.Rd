@@ -5,7 +5,7 @@
 \title{Standard Error Estimate for Value-at-Risk (VaR) of Returns}
 \usage{
 VaR.SE(data = NULL, p = 0.95, se.method = c("IFiid", "IFcor",
-  "IFcorPW", "IFcorAdapt", "BOOTiid", "BOOTcor")[1:2],
+  "IFcorAdapt", "IFcorPW", "BOOTiid", "BOOTcor")[1:2],
   cleanOutliers = FALSE, fitting.method = c("Exponential", "Gamma")[1],
   ...)
 }

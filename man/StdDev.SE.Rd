@@ -4,7 +4,7 @@
 \alias{StdDev.SE}
 \title{Standard Error Estimate for Standard Deviation (StdDev) of Returns}
 \usage{
-StdDev.SE(data, se.method = c("IFiid", "IFcor", "IFcorPW", "IFcorAdapt",
+StdDev.SE(data, se.method = c("IFiid", "IFcor", "IFcorAdapt", "IFcorPW",
   "BOOTiid", "BOOTcor")[1:2], cleanOutliers = FALSE,
   fitting.method = c("Exponential", "Gamma")[1], ...)
 }

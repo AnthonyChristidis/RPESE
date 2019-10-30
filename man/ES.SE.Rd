@@ -4,8 +4,8 @@
 \alias{ES.SE}
 \title{Standard Error Estimate for Expected Shortfall (ES) of Returns}
 \usage{
-ES.SE(data, p = 0.95, se.method = c("IFiid", "IFcor", "IFcorPW",
-  "IFcorAdapt", "BOOTiid", "BOOTcor")[1:2], cleanOutliers = FALSE,
+ES.SE(data, p = 0.95, se.method = c("IFiid", "IFcor", "IFcorAdapt",
+  "IFcorPW", "BOOTiid", "BOOTcor")[1:2], cleanOutliers = FALSE,
   fitting.method = c("Exponential", "Gamma")[1], ...)
 }
 \arguments{

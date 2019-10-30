@@ -5,7 +5,7 @@
 \title{Standard Error Estimate for Value-at-Risk Ratio (VaRratio) of Returns}
 \usage{
 VaRratio.SE(data, alpha = 0.1, rf = 0, se.method = c("IFiid",
-  "IFcor", "IFcorPW", "IFcorAdapt", "BOOTiid", "BOOTcor")[c(1, 4)],
+  "IFcor", "IFcorAdapt", "IFcorPW", "BOOTiid", "BOOTcor")[c(1, 3)],
   cleanOutliers = FALSE, fitting.method = c("Exponential", "Gamma")[1],
   ...)
 }

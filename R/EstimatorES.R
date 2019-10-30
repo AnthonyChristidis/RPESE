@@ -47,7 +47,7 @@
 EstimatorSE <- function(data,
                         estimator.fun = c("Mean","SD","VaR","ES","SR","SoR","ESratio","VaRratio",
                                           "SoR","LPM","OmegaRatio","SemiSD","RachevRatio"),
-                        se.method = c("IFiid","IFcor","IFcorPW","IFcorAdapt","BOOTiid","BOOTcor"),
+                        se.method = c("IFiid","IFcor","IFcorAdapt","IFcorPW","BOOTiid","BOOTcor"),
                         cleanOutliers=FALSE,
                         fitting.method=c("Exponential", "Gamma")[1],
                         a=0.3, b=0.7,
@@ -64,7 +64,7 @@ EstimatorSE <- function(data,
     stop("The specified estimator function is not available.")
 
   # Available SE methods
-  se.available <- c("IFiid","IFcor","IFcorPW","IFcorAdapt","BOOTiid","BOOTcor")
+  se.available <- c("IFiid","IFcor","IFcorAdapt","IFcorPW","BOOTiid","BOOTcor")
   # Checking if the standard error method is available
   if(!(se.method %in% se.available))
     stop("The specified standard error method is not available.")

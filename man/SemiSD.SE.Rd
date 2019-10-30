@@ -4,8 +4,8 @@
 \alias{SemiSD.SE}
 \title{Standard Error Estimate for Semi-Standared Deviation (SemiSD) of Returns}
 \usage{
-SemiSD.SE(data, rf = 0, se.method = c("IFiid", "IFcor", "IFcorPW",
-  "IFcorAdapt", "BOOTiid", "BOOTcor")[1:2], cleanOutliers = FALSE,
+SemiSD.SE(data, rf = 0, se.method = c("IFiid", "IFcor", "IFcorAdapt",
+  "IFcorPW", "BOOTiid", "BOOTcor")[1:2], cleanOutliers = FALSE,
   fitting.method = c("Exponential", "Gamma")[1], ...)
 }
 \arguments{
