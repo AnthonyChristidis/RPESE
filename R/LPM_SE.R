@@ -29,7 +29,7 @@
 #'                  "ED", "FIA", "GM", "LS", "MA",
 #'                  "RV", "SS", "FOF")
 #' # Computing the standard errors for
-#' # the three influence functions based approaches
+#' # the two influence functions based approaches
 #' LPM.SE(edhec, se.method=c("IFiid","IFcor"),
 #'        cleanOutliers=FALSE,
 #'        fitting.method=c("Exponential", "Gamma")[1])
