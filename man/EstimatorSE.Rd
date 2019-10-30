@@ -5,11 +5,11 @@
 \title{Wrapper Function for Standard Errors Estimates Functions}
 \usage{
 EstimatorSE(data, estimator.fun = c("Mean", "SD", "VaR", "ES", "SR",
-  "SoR", "ESratio", "VaRratio", "SoR", "LPM", "OmegaRatio", "SSD",
-  "RachevRatio"), se.method = c("IFiid", "IFcor", "IFcorAdapt",
-  "BOOTiid", "BOOTcor", "none"), prewhiten = FALSE,
-  cleanOutliers = FALSE, fitting.method = c("Exponential", "Gamma")[1],
-  a = 0.3, b = 0.7, ...)
+  "SoR", "ESratio", "VaRratio", "SoR", "LPM", "OmegaRatio", "SemiSD",
+  "RachevRatio"), se.method = c("IFiid", "IFcor", "IFcorPW",
+  "IFcorAdapt", "BOOTiid", "BOOTcor"), cleanOutliers = FALSE,
+  fitting.method = c("Exponential", "Gamma")[1], a = 0.3, b = 0.7,
+  ...)
 }
 \arguments{
 \item{data}{Data of returns for one or multiple assets or portfolios.}
@@ -18,10 +18,8 @@ EstimatorSE(data, estimator.fun = c("Mean", "SD", "VaR", "ES", "SR",
 
 \item{se.method}{A character string indicating which method should be used to compute
 the standard error of the estimated standard deviation. One of:
-\code{"IFiid"} (default), \code{"IFcor"}, \code{"IFcorAdapt"},
+\code{"IFiid"}, \code{"IFcor"}, \code{"IFcorAdapt"}, \code{"IFcorPW"},
 \code{"BOOTiid"}, \code{"BOOTcor"}, or \code{"none"}.}
-
-\item{prewhiten}{Boolean variable to indicate if the IF TS is pre-whitened (TRUE) or not (FALSE).}
 
 \item{cleanOutliers}{Boolean variable to indicate whether the pre-whitenning of the influence functions TS should be done through a robust filter.}
 
@@ -50,7 +48,7 @@ names(edhec) = c("CA", "CTA", "DIS", "EM", "EMN",
 # Computing the standard errors for
 # the three influence functions based approaches
 EstimatorSE(edhec[,"CA"], se.method=c("IFcor"),
-            prewhiten=FALSE, cleanOutliers=FALSE,
+            cleanOutliers=FALSE,
             fitting.method=c("Exponential", "Gamma")[1])
 
 }

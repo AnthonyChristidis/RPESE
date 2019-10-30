@@ -27,9 +27,8 @@
 #' @param threshold Parameter to determine whether we use a "mean" or "const" threshold.
 #' @param se.method A character string indicating which method should be used to compute
 #' the standard error of the estimated standard deviation. One or a combination of:
-#' \code{"IFiid"} (default), \code{"IFcor"}, \code{"IFcorAdapt"} (default),
-#' \code{"BOOTiid"}, \code{"BOOTcor"}, or \code{"none"}.
-#' @param prewhiten Boolean variable to indicate if the IF TS is pre-whitened (TRUE) or not (FALSE).
+#' \code{"IFiid"} (default), \code{"IFcor"}, \code{"IFcorPW"}, \code{"IFcorAdapt"} (default),
+#' \code{"BOOTiid"} or \code{"BOOTcor"}.
 #' @param cleanOutliers Boolean variable to indicate whether the pre-whitenning of the influence functions TS should be done through a robust filter.
 #' @param fitting.method Distribution used in the standard errors computation. Should be one of "Exponential" (default) or "Gamma".
 #' @param ... Additional parameters.
@@ -52,12 +51,12 @@
 #' # Computing the standard errors for
 #' # the three influence functions based approaches
 #' SortinoRatio.SE(edhec[,"CA"], se.method=c("IFiid","IFcorAdapt"),
-#'                 prewhiten=FALSE, cleanOutliers=FALSE,
+#'                 cleanOutliers=FALSE,
 #'                 fitting.method=c("Exponential", "Gamma")[1])
 #'
 SortinoRatio.SE <- function (data, MAR = 0, threshold = c("mean", "const")[1],
-                             se.method=c("IFiid","IFcor", "IFcorAdapt","BOOTiid","BOOTcor","none")[1,3],
-                             prewhiten=FALSE, cleanOutliers=FALSE, fitting.method=c("Exponential", "Gamma")[1],
+                             se.method=c("IFiid","IFcor","IFcorPW","IFcorAdapt","BOOTiid","BOOTcor")[c(1,4)],
+                             cleanOutliers=FALSE, fitting.method=c("Exponential", "Gamma")[1],
                              ...)
   { # @author Brian G. Peterson and Xin Chen
     # modified from function by Sankalp Upadhyay <sankalp.upadhyay [at] gmail [dot] com> with permission
@@ -81,13 +80,12 @@ SortinoRatio.SE <- function (data, MAR = 0, threshold = c("mean", "const")[1],
       data=Return.portfolio(data,weights,...)
     }
 
-    if(se.method[1]!="none"){
+    if(!is.null(se.method)){
       res=list(SoR=mySoR)
       # for each of the method specified in se.method, compute the standard error
       for(mymethod in se.method){
         res[[mymethod]]=EstimatorSE(data, estimator.fun = "SoR", const = MAR, threshold=threshold, MAR = MAR,
                                     se.method = mymethod,
-                                    prewhiten=prewhiten,
                                     cleanOutliers=cleanOutliers,
                                     fitting.method=fitting.method,
                                     ...)

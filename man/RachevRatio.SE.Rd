@@ -5,8 +5,8 @@
 \title{Standard Error Estimate for Rachev Ratio of Returns}
 \usage{
 RachevRatio.SE(data, alpha = 0.1, beta = 0.1, rf = 0,
-  se.method = c("IFiid", "IFcor", "IFcorAdapt", "BOOTiid", "BOOTcor",
-  "none")[1, 3], prewhiten = FALSE, cleanOutliers = FALSE,
+  se.method = c("IFiid", "IFcor", "IFcorPW", "IFcorAdapt", "BOOTiid",
+  "BOOTcor")[c(1, 4)], cleanOutliers = FALSE,
   fitting.method = c("Exponential", "Gamma")[1], ...)
 }
 \arguments{
@@ -20,10 +20,8 @@ RachevRatio.SE(data, alpha = 0.1, beta = 0.1, rf = 0,
 
 \item{se.method}{A character string indicating which method should be used to compute
 the standard error of the estimated standard deviation. One or a combination of:
-\code{"IFiid"} (default), \code{"IFcor"}, \code{"IFcorAdapt"} (default),
-\code{"BOOTiid"}, \code{"BOOTcor"}, or \code{"none"}.}
-
-\item{prewhiten}{Boolean variable to indicate if the IF TS is pre-whitened (TRUE) or not (FALSE).}
+\code{"IFiid"} (default), \code{"IFcor"}, \code{"IFcorPW"}, \code{"IFcorAdapt"} (default),
+\code{"BOOTiid"} or \code{"BOOTcor"}.}
 
 \item{cleanOutliers}{Boolean variable to indicate whether the pre-whitenning of the influence functions TS should be done through a robust filter.}
 
@@ -48,7 +46,7 @@ names(edhec) = c("CA", "CTA", "DIS", "EM", "EMN",
 # Computing the standard errors for
 # the three influence functions based approaches
 RachevRatio.SE(edhec, se.method=c("IFiid","IFcorAdapt"),
-               prewhiten=FALSE, cleanOutliers=FALSE,
+               cleanOutliers=FALSE,
                fitting.method=c("Exponential", "Gamma")[1])
 
 }

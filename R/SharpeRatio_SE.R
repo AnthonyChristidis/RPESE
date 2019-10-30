@@ -22,9 +22,8 @@
 #' @param Rf Risk free rate.
 #' @param se.method A character string indicating which method should be used to compute
 #' the standard error of the estimated standard deviation. One or a combination of:
-#' \code{"IFiid"} (default), \code{"IFcor"}, \code{"IFcorAdapt"} (default),
-#' \code{"BOOTiid"}, \code{"BOOTcor"}, or \code{"none"}.
-#' @param prewhiten Boolean variable to indicate if the IF TS is pre-whitened (TRUE) or not (FALSE).
+#' \code{"IFiid"} (default), \code{"IFcor"}, \code{"IFcorPW"}, \code{"IFcorAdapt"} (default),
+#' \code{"BOOTiid"} or \code{"BOOTcor"}.
 #' @param cleanOutliers Boolean variable to indicate whether the pre-whitenning of the influence functions TS should be done through a robust filter.
 #' @param fitting.method Distribution used in the standard errors computation. Should be one of "Exponential" (default) or "Gamma".
 #' @param ... Additional parameters.
@@ -47,12 +46,12 @@
 #' # Computing the standard errors for
 #' # the three influence functions based approaches
 #' SharpeRatio.SE(edhec, se.method=c("IFiid","IFcorAdapt"),
-#'                prewhiten=FALSE, cleanOutliers=FALSE,
+#'                cleanOutliers=FALSE,
 #'                fitting.method=c("Exponential", "Gamma")[1])
 #'
 SharpeRatio.SE <- function (data, Rf = 0,
-                            se.method=c("IFiid","IFcor", "IFcorAdapt","BOOTiid","BOOTcor","none")[1,3],
-                            prewhiten=FALSE, cleanOutliers=FALSE, fitting.method=c("Exponential", "Gamma")[1],
+                            se.method=c("IFiid","IFcor","IFcorPW","IFcorAdapt","BOOTiid","BOOTcor")[c(1,4)],
+                            cleanOutliers=FALSE, fitting.method=c("Exponential", "Gamma")[1],
                             ...){
 
     # Forcing the following parameters
@@ -63,7 +62,7 @@ SharpeRatio.SE <- function (data, Rf = 0,
     mySR = t(apply(data, 2, SR, rf = Rf, ...))
     rownames(mySR) = "SharpeRatio"
 
-    if(length(FUN)==1 & FUN=="StdDev" & is.null(weights) & annualize == FALSE & se.method[1]!="none"){
+    if(length(FUN)==1 & FUN=="StdDev" & is.null(weights) & annualize == FALSE & !is.null(se.method)){
 
       data = checkData(data)
 
@@ -75,7 +74,6 @@ SharpeRatio.SE <- function (data, Rf = 0,
       for(mymethod in se.method){
         res[[mymethod]]=EstimatorSE(data, estimator.fun = "SR", rf = Rf,
                                     se.method = mymethod,
-                                    prewhiten=prewhiten,
                                     cleanOutliers=cleanOutliers,
                                     fitting.method=fitting.method,
                                     ...)

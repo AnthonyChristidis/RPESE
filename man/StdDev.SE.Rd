@@ -4,8 +4,8 @@
 \alias{StdDev.SE}
 \title{Standard Error Estimate for Standard Deviation (StdDev) of Returns}
 \usage{
-StdDev.SE(data, se.method = c("IFiid", "IFcor", "IFcorAdapt", "BOOTiid",
-  "BOOTcor", "none")[1:3], prewhiten = FALSE, cleanOutliers = FALSE,
+StdDev.SE(data, se.method = c("IFiid", "IFcor", "IFcorPW", "IFcorAdapt",
+  "BOOTiid", "BOOTcor")[1:2], cleanOutliers = FALSE,
   fitting.method = c("Exponential", "Gamma")[1], ...)
 }
 \arguments{
@@ -13,10 +13,8 @@ StdDev.SE(data, se.method = c("IFiid", "IFcor", "IFcorAdapt", "BOOTiid",
 
 \item{se.method}{A character string indicating which method should be used to compute
 the standard error of the estimated standard deviation. One or a combination of:
-\code{"IFiid"} (default), \code{"IFcor"} (default), \code{"IFcorAdapt"} (default),
-\code{"BOOTiid"}, \code{"BOOTcor"}, or \code{"none"}.}
-
-\item{prewhiten}{Boolean variable to indicate if the IF TS is pre-whitened (TRUE) or not (FALSE).}
+\code{"IFiid"} (default), \code{"IFcor"} (default), \code{"IFcorPW"}, \code{"IFcorAdapt"} (default),
+\code{"BOOTiid"} or \code{"BOOTcor"}.}
 
 \item{cleanOutliers}{Boolean variable to indicate whether the pre-whitenning of the influence functions TS should be done through a robust filter.}
 
@@ -41,7 +39,7 @@ names(edhec) = c("CA", "CTA", "DIS", "EM", "EMN",
 # Computing the standard errors for
 # the three influence functions based approaches
 StdDev.SE(edhec, se.method=c("IFiid","IFcor","IFcorAdapt"),
-          prewhiten=FALSE, cleanOutliers=FALSE,
+          cleanOutliers=FALSE,
           fitting.method=c("Exponential", "Gamma")[1])
 
 }

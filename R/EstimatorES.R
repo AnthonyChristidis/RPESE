@@ -15,9 +15,8 @@
 #' @param estimator.fun Risk or performance measure to compute estimates of standard errors.
 #' @param se.method A character string indicating which method should be used to compute
 #' the standard error of the estimated standard deviation. One of:
-#' \code{"IFiid"} (default), \code{"IFcor"}, \code{"IFcorAdapt"},
+#' \code{"IFiid"}, \code{"IFcor"}, \code{"IFcorAdapt"}, \code{"IFcorPW"},
 #' \code{"BOOTiid"}, \code{"BOOTcor"}, or \code{"none"}.
-#' @param prewhiten Boolean variable to indicate if the IF TS is pre-whitened (TRUE) or not (FALSE).
 #' @param cleanOutliers Boolean variable to indicate whether the pre-whitenning of the influence functions TS should be done through a robust filter.
 #' @param fitting.method Distribution used in the standard errors computation. Should be one of "Exponential" (default) or "Gamma".
 #' @param a First adaptive method parameter.
@@ -42,13 +41,13 @@
 #' # Computing the standard errors for
 #' # the three influence functions based approaches
 #' EstimatorSE(edhec[,"CA"], se.method=c("IFcor"),
-#'             prewhiten=FALSE, cleanOutliers=FALSE,
+#'             cleanOutliers=FALSE,
 #'             fitting.method=c("Exponential", "Gamma")[1])
 #'
 EstimatorSE <- function(data,
-                        estimator.fun = c("Mean","SD","VaR","ES","SR","SoR","ESratio", "VaRratio", "SoR", "LPM", "OmegaRatio", "SSD", "RachevRatio"),
-                        se.method = c("IFiid","IFcor", "IFcorAdapt","BOOTiid","BOOTcor","none"),
-                        prewhiten = FALSE,
+                        estimator.fun = c("Mean","SD","VaR","ES","SR","SoR","ESratio","VaRratio",
+                                          "SoR","LPM","OmegaRatio","SemiSD","RachevRatio"),
+                        se.method = c("IFiid","IFcor","IFcorPW","IFcorAdapt","BOOTiid","BOOTcor"),
                         cleanOutliers=FALSE,
                         fitting.method=c("Exponential", "Gamma")[1],
                         a=0.3, b=0.7,
@@ -59,13 +58,13 @@ EstimatorSE <- function(data,
 
   # Available estimator functions
   estimators.available <- c("Mean","SD","VaR","ES","SR","SoR",
-                            "ESratio", "VaRratio", "SoR", "LPM", "OmegaRatio", "SSD", "RachevRatio")
+                            "ESratio", "VaRratio", "SoR", "LPM", "OmegaRatio", "SemiSD", "RachevRatio")
   # Checking if the specified risk measure is available
   if(!(estimator.fun %in% estimators.available))
     stop("The specified estimator function is not available.")
 
   # Available SE methods
-  se.available <- c("IFiid","IFcor", "IFcorAdapt","BOOTiid","BOOTcor","none")
+  se.available <- c("IFiid","IFcor","IFcorPW","IFcorAdapt","BOOTiid","BOOTcor")
   # Checking if the standard error method is available
   if(!(se.method %in% se.available))
     stop("The specified standard error method is not available.")
@@ -87,7 +86,7 @@ EstimatorSE <- function(data,
                  VaRratio = VaRratio,
                  LPM = LPM,
                  OmegaRatio = OmegaRatio,
-                 SSD = SSD,
+                 SemiSD = SemiSD,
                  RachevRatio = RachevRatio,
                  stop("The estimator.fun specified is not implemented yet, please contact Anthony Christidis (anthony.christidis@stat.ubc.ca) or submit an issue at the github repository")
   )
@@ -102,7 +101,7 @@ EstimatorSE <- function(data,
                      VaRratio = IF.VaRratio,
                      LPM = IF.LPM,
                      OmegaRatio = IF.Omega,
-                     SSD = IF.SSD,
+                     SemiSD = IF.SSD,
                      RachevRatio = IF.RachR,
                      stop("The estimator.fun specified is not implemented yet, please contact Anthony Christidis (anthony.christidis@stat.ubc.ca) or submit an issue at the github repository")
   )
@@ -111,7 +110,10 @@ EstimatorSE <- function(data,
     none = NULL,
     IFiid = SE.xts(data, SE.IF.iid, myfun, myfun.IF, ...),
     IFcor = SE.xts(data, SE.IF.cor, myfun, myfun.IF,
-                   prewhiten=prewhiten, cleanOutliers=cleanOutliers, fitting.method=fitting.method,
+                   prewhiten=FALSE, cleanOutliers=cleanOutliers, fitting.method=fitting.method,
+                   ...),
+    IFcorPW = SE.xts(data, SE.IF.cor, myfun, myfun.IF,
+                   prewhiten=TRUE, cleanOutliers=cleanOutliers, fitting.method=fitting.method,
                    ...),
     IFcorAdapt = list(cor=SE.xts(data, SE.IF.cor, myfun, myfun.IF, prewhiten=FALSE,
                                  cleanOutliers=cleanOutliers, fitting.method=fitting.method,

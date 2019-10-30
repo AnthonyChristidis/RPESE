@@ -5,7 +5,7 @@
 \title{Standard Error Estimate for Lower Partial Moment (LPM) of Returns}
 \usage{
 LPM.SE(data, const = 0, k = 1, se.method = c("IFiid", "IFcor",
-  "IFcorAdapt", "BOOTiid", "BOOTcor", "none")[1:2], prewhiten = FALSE,
+  "IFcorPW", "IFcorAdapt", "BOOTiid", "BOOTcor")[1:2],
   cleanOutliers = FALSE, fitting.method = c("Exponential", "Gamma")[1],
   ...)
 }
@@ -18,10 +18,8 @@ LPM.SE(data, const = 0, k = 1, se.method = c("IFiid", "IFcor",
 
 \item{se.method}{A character string indicating which method should be used to compute
 the standard error of the estimated standard deviation. One or a combination of:
-\code{"IFiid"} (default), \code{"IFcor"} (default), \code{"IFcorAdapt"},
-\code{"BOOTiid"}, \code{"BOOTcor"}, or \code{"none"}.}
-
-\item{prewhiten}{Boolean variable to indicate if the IF TS is pre-whitened (TRUE) or not (FALSE).}
+\code{"IFiid"} (default), \code{"IFcor"} (default), \code{"IFcorPW"}, \code{"IFcorAdapt"},
+\code{"BOOTiid"} or \code{"BOOTcor"}.}
 
 \item{cleanOutliers}{Boolean variable to indicate whether the pre-whitenning of the influence functions TS should be done through a robust filter.}
 
@@ -46,7 +44,7 @@ names(edhec) = c("CA", "CTA", "DIS", "EM", "EMN",
 # Computing the standard errors for
 # the three influence functions based approaches
 LPM.SE(edhec, se.method=c("IFiid","IFcor"),
-       prewhiten=FALSE, cleanOutliers=FALSE,
+       cleanOutliers=FALSE,
        fitting.method=c("Exponential", "Gamma")[1])
 
 }
