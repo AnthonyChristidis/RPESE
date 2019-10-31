@@ -22,15 +22,9 @@ SE.glmnet_exp <- function(data, ...,
                           keep=1,
                           standardize = FALSE,
                           return.coeffs = FALSE,
-                          prewhiten = FALSE,
+                          prewhiten = FALSE, ar.coeffs=NULL,
                           fitting.method = c("Exponential", "Gamma")[1]){
   ##### perform prewhitening
-  if(prewhiten){
-    res.ar = ar(data, ...)
-#    res.ar = ar(data)
-    ar.coeffs = res.ar$ar
-    data = na.omit(res.ar$resid)
-  }
 
   N=length(data)
   # Step 1: compute the periodograms

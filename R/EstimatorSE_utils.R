@@ -48,9 +48,15 @@ SE.IF.cor = function(x, myfun.IF, return.coeffs = FALSE, d.GLM.EN = 5, alpha.EN 
                      ...){
   d = d.GLM.EN
   data.IF = myfun.IF(x, prewhiten=prewhiten, cleanOutliers=cleanOutliers, ...)
+  if(prewhiten){
+    ar.coeffs <- as.numeric(arima(x=x, order=c(1,0,0), include.mean=TRUE)$coef[1])
+  } else{
+    ar.coeffs <- NULL
+  }
   tmp = SE.glmnet_exp(data.IF, standardize = standardize,
                       return.coeffs = return.coeffs, d = d, alpha.EN = alpha.EN, keep = keep,
                       fitting.method = fitting.method,
+                      prewhiten = prewhiten, ar.coeffs = ar.coeffs,
                       ...)
   if(return.coeffs){
     coeffs = tmp[[2]]
