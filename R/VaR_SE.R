@@ -64,9 +64,6 @@
 #' Comoments and Implications for Portfolio Selection. 2007. EDHEC Risk and
 #' Asset Management Research Centre working paper.
 #'
-#' Return to RiskMetrics: Evolution of a Standard
-#' \url{http://www.riskmetrics.com/publications/techdocs/r2rovv.html}
-#'
 #' Zangari, Peter. A VaR Methodology for Portfolios that include Options. 1996.
 #' RiskMetrics Monitor, First Quarter, 4-12.
 #'
