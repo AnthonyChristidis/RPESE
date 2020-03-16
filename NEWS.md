@@ -8,3 +8,6 @@
 # RPESE 1.0.2
 * Add the option to return the coefficients from the Exponential/Gamma fit.
 
+# RPESE 1.0.3
+* Fix error for the StdDev.SE function.
+* New option to return the correlations of the returns and the IF transformed returns.

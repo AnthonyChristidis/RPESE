@@ -92,7 +92,7 @@ EstimatorSE <- function(data,
 
   myfun = switch(estimator.fun,
                  Mean = mean,
-                 SD = sd,
+                 SD = StdDev,
                  VaR = VaR.hist,
                  ES = ES.hist,
                  SR = SR,
