@@ -12,13 +12,13 @@ Description: Estimates of standard errors of popular risk and performance
 Biarch: true
 License: GPL (>= 2)
 Imports:
-    RPEIF,
-    RPEGLMEN,
-    PerformanceAnalytics,
     xts, 
     zoo, 
     boot, 
-    sandwich
+    sandwich,
+    RPEIF,
+    RPEGLMEN,
+    PerformanceAnalytics
 Suggests:
     testthat, R.rsp
 Depends:
