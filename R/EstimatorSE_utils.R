@@ -52,7 +52,7 @@ SE.IF.cor = function(x, myfun.IF,
                      freq.include=c("All", "Decimate", "Truncate")[1], freq.par=0.5,
                      return.coef=FALSE,
                      ...){
-  data.IF = myfun.IF(x, prewhiten=prewhiten, cleanOutliers=cleanOutliers, ...)
+  data.IF = myfun.IF(x, prewhiten=FALSE, cleanOutliers=cleanOutliers, ...)
   if(prewhiten){
     ar.coeffs <- as.numeric(arima(x=data.IF, order=c(1,0,0), include.mean=TRUE)$coef[1])
     data.IF <- as.numeric(arima(x=data.IF, order=c(1,0,0), include.mean=TRUE)$res)
