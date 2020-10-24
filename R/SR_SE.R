@@ -1,11 +1,12 @@
 #'
 #' @import RPEIF
 #'
-#' @title Standard Error Estimate for Mean of Returns
+#' @title Standard Error Estimate for Sharpe Ratio (SR) of Returns
 #'
-#' @description \code{Mean.SE} computes the standard error of the mean of the returns.
+#' @description \code{SR.SE} computes the standard error of the Sharpe ratio of the returns.
 #'
 #' @param data Data of returns for one or multiple assets or portfolios.
+#' @param rf Risk free rate.
 #' @param se.method A character string indicating which method should be used to compute
 #' the standard error of the estimated standard deviation. One or a combination of:
 #' \code{"IFiid"} (default), \code{"IFcor"}, \code{"IFcorPW"}, \code{"IFcorAdapt"} (default),
@@ -21,7 +22,7 @@
 #' @param return.coef Boolean variable to indicate whether the coefficients of the penalized GLM fit are returned. Default if FALSE.
 #' @param ... Additional parameters.
 #'
-#' @return A vector or a list depending on se.method
+#' @return A vector or a list depending on \code{se.method}.
 #'
 #' @export
 #'
@@ -36,30 +37,30 @@
 #'                  "RV", "SS", "FOF")
 #' # Computing the standard errors for
 #' # the two influence functions based approaches
-#' Mean.SE(edhec, se.method = c("IFiid","IFcorAdapt"),
-#'         cleanOutliers = FALSE,
-#'         fitting.method = c("Exponential", "Gamma")[1])
+#' SR.SE(edhec, se.method = c("IFiid","IFcorAdapt"),
+#'       cleanOutliers = FALSE,
+#'       fitting.method = c("Exponential", "Gamma")[1])
 #'
-Mean.SE <- function(data,
-                    se.method = c("IFiid","IFcor","IFcorAdapt","IFcorPW","BOOTiid","BOOTcor")[c(1,3)],
-                    cleanOutliers = FALSE, fitting.method = c("Exponential", "Gamma")[1], d.GLM.EN  =  5,
-                    freq.include = c("All", "Decimate", "Truncate")[1], freq.par = 0.5,
-                    corOut  =  c("none", "retCor","retIFCor", "retIFCorPW")[1],
-                    return.coef  =  FALSE,
-                    ...){
+SR.SE <- function (data, rf = 0,
+                   se.method = c("IFiid","IFcor","IFcorAdapt","IFcorPW","BOOTiid","BOOTcor")[c(1,3)],
+                   cleanOutliers = FALSE, fitting.method=c("Exponential", "Gamma")[1], d.GLM.EN = 5,
+                   freq.include=c("All", "Decimate", "Truncate")[1], freq.par = 0.5,
+                   corOut = c("none", "retCor","retIFCor", "retIFCorPW")[1],
+                   return.coef = FALSE,
+                   ...){
 
   # Point estimate
   if(is.null(dim(data)) || ncol(data) == 1)
-    point.est <- Mean(data) else
-      point.est <- apply(data, 2, function(x) Mean(x))
+    point.est <- SR(data, rf = rf) else
+      point.est <- apply(data, 2, function(x) SR(x, rf = rf))
 
     # SE Computation
     if(is.null(se.method)){
       return(point.est)
     } else{
-      SE.out <- list(mean = point.est)
+      SE.out <- list(SR = point.est)
       for(mymethod in se.method){
-        SE.out[[mymethod]] <- EstimatorSE(data, estimator.fun = "Mean",
+        SE.out[[mymethod]] <- EstimatorSE(data, estimator.fun = "SR", rf = rf,
                                           se.method = mymethod,
                                           cleanOutliers = cleanOutliers,
                                           fitting.method = fitting.method, d.GLM.EN = d.GLM.EN,
@@ -69,10 +70,9 @@ Mean.SE <- function(data,
       }
 
       # Adding the correlations to the list
-      SE.out <- Add_Correlations(SE.out = SE.out, data = data, cleanOutliers = cleanOutliers, corOut = corOut, IF.func = IF.mean, ...)
+      SE.out <- Add_Correlations(SE.out = SE.out, data = data, cleanOutliers = cleanOutliers, corOut = corOut, IF.func = IF.SR, ...)
 
       # Returning the output
       return(SE.out)
     }
 }
-

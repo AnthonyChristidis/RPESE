@@ -1,11 +1,13 @@
 #'
 #' @import RPEIF
 #'
-#' @title Standard Error Estimate for Mean of Returns
+#' @title Standard Error Estimate for Rachev Ratio of Returns
 #'
-#' @description \code{Mean.SE} computes the standard error of the mean of the returns.
+#' @description \code{RachevRatio.SE} computes the standard error of the Rachev ratio of the returns.
 #'
 #' @param data Data of returns for one or multiple assets or portfolios.
+#' @param alpha Lower tail probability.
+#' @param beta Upper tail probability.
 #' @param se.method A character string indicating which method should be used to compute
 #' the standard error of the estimated standard deviation. One or a combination of:
 #' \code{"IFiid"} (default), \code{"IFcor"}, \code{"IFcorPW"}, \code{"IFcorAdapt"} (default),
@@ -21,45 +23,45 @@
 #' @param return.coef Boolean variable to indicate whether the coefficients of the penalized GLM fit are returned. Default if FALSE.
 #' @param ... Additional parameters.
 #'
-#' @return A vector or a list depending on se.method
+#' @return A vector or a list depending on \code{se.method}.
 #'
 #' @export
 #'
 #' @author Anthony-Alexander Christidis, \email{anthony.christidis@stat.ubc.ca}
 #'
 #' @examples
-#' # Loading data
+#' # Loading data from PerformanceAnalytics
 #' data(edhec)
 #' # Changing the data colnames
-#' names(edhec) = c("CA", "CTA", "DIS", "EM", "EMN",
+#' names(edhec)  =  c("CA", "CTA", "DIS", "EM", "EMN",
 #'                  "ED", "FIA", "GM", "LS", "MA",
 #'                  "RV", "SS", "FOF")
 #' # Computing the standard errors for
 #' # the two influence functions based approaches
-#' Mean.SE(edhec, se.method = c("IFiid","IFcorAdapt"),
-#'         cleanOutliers = FALSE,
-#'         fitting.method = c("Exponential", "Gamma")[1])
+#' RachevRatio.SE(edhec, se.method = c("IFiid","IFcorAdapt"),
+#'                cleanOutliers = FALSE,
+#'                fitting.method = c("Exponential", "Gamma")[1])
 #'
-Mean.SE <- function(data,
-                    se.method = c("IFiid","IFcor","IFcorAdapt","IFcorPW","BOOTiid","BOOTcor")[c(1,3)],
-                    cleanOutliers = FALSE, fitting.method = c("Exponential", "Gamma")[1], d.GLM.EN  =  5,
-                    freq.include = c("All", "Decimate", "Truncate")[1], freq.par = 0.5,
-                    corOut  =  c("none", "retCor","retIFCor", "retIFCorPW")[1],
-                    return.coef  =  FALSE,
-                    ...){
+RachevRatio.SE <- function(data, alpha = 0.1, beta = 0.1,
+                           se.method = c("IFiid","IFcor","IFcorAdapt","IFcorPW","BOOTiid","BOOTcor")[c(1,3)],
+                           cleanOutliers = FALSE, fitting.method = c("Exponential", "Gamma")[1], d.GLM.EN  =  5,
+                           freq.include = c("All", "Decimate", "Truncate")[1], freq.par = 0.5,
+                           corOut  =  c("none", "retCor","retIFCor", "retIFCorPW")[1],
+                           return.coef = FALSE,
+                           ...){
 
   # Point estimate
   if(is.null(dim(data)) || ncol(data) == 1)
-    point.est <- Mean(data) else
-      point.est <- apply(data, 2, function(x) Mean(x))
+    point.est <- RachevRatio(data, alpha = alpha, beta = beta) else
+      point.est <- apply(data, 2, function(x) RachevRatio(x, alpha = alpha, beta = beta))
 
     # SE Computation
     if(is.null(se.method)){
       return(point.est)
     } else{
-      SE.out <- list(mean = point.est)
+      SE.out <- list(RachevRatio = point.est)
       for(mymethod in se.method){
-        SE.out[[mymethod]] <- EstimatorSE(data, estimator.fun = "Mean",
+        SE.out[[mymethod]] <- EstimatorSE(data, estimator.fun = "RachevRatio", alpha = alpha, beta = beta,
                                           se.method = mymethod,
                                           cleanOutliers = cleanOutliers,
                                           fitting.method = fitting.method, d.GLM.EN = d.GLM.EN,
@@ -69,10 +71,9 @@ Mean.SE <- function(data,
       }
 
       # Adding the correlations to the list
-      SE.out <- Add_Correlations(SE.out = SE.out, data = data, cleanOutliers = cleanOutliers, corOut = corOut, IF.func = IF.mean, ...)
+      SE.out <- Add_Correlations(SE.out = SE.out, data = data, cleanOutliers = cleanOutliers, corOut = corOut, IF.func = IF.RachevRatio, ...)
 
       # Returning the output
       return(SE.out)
     }
 }
-
