@@ -28,8 +28,8 @@ devtools::install_github("AnthonyChristidis/RPESE")
 ``` r
 # Sample Code
 library(RPESE)
-# Loading data from Performance Analytics
-data(edhec, package="PerformanceAnalytics")
+# Loading managers data
+data(edhec)
 colnames(edhec) = c("CA", "CTAG", "DIS", "EM","EMN", "ED", "FIA",
                     "GM", "LS", "MA", "RV", "SS", "FoF")
 # Computing the standard errors for the three influence functions based approaches
