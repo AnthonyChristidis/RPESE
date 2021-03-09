@@ -25,3 +25,4 @@ Depends:
 RoxygenNote: 7.0.2
 VignetteBuilder: R.rsp
 LazyData: true
+ 
