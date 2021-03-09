@@ -1,8 +1,8 @@
 Package: RPESE
 Type: Package
 Title: Estimates of Standard Errors for Risk and Performance Measures
-Version: 1.1.0
-Date: 2020-10-23
+Version: 1.2.0
+Date: 2020-03-08
 Author: Anthony Christidis <anthony.christidis@stat.ubc.ca>, 
   Xin Chen <chenx26@uw.edu>
 Maintainer: Anthony Christidis <anthony.christidis@stat.ubc.ca>
@@ -18,6 +18,7 @@ Imports:
     sandwich,
     RPEIF,
     RPEGLMEN,
+    RobStatTM
 Suggests:
     testthat, R.rsp
 Depends:
