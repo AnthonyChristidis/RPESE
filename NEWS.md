@@ -29,6 +29,9 @@
 * Add the robust m-estimator of location.
 * Update vignette for new robust estimator and fix old typos.
 
-# RPESE 1.2.0
+# RPESE 1.2.1
 * Update the name for robust mean function.
 * Change default SE methods for performance measures (Adapt -> PW)
+
+# RPESE 1.2.2
+* Update RPEIF function name for mean estimator.

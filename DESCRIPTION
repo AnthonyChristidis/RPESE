@@ -1,8 +1,8 @@
 Package: RPESE
 Type: Package
 Title: Estimates of Standard Errors for Risk and Performance Measures
-Version: 1.2.0
-Date: 2021-03-08
+Version: 1.2.2
+Date: 2021-05-11
 Author: Anthony Christidis <anthony.christidis@stat.ubc.ca>, 
   Xin Chen <chenx26@uw.edu>
 Maintainer: Anthony Christidis <anthony.christidis@stat.ubc.ca>
@@ -23,5 +23,4 @@ Suggests:
 Depends:
 RoxygenNote: 7.0.2
 VignetteBuilder: R.rsp
-LazyData: true
- 
+
