@@ -5,9 +5,6 @@
 # Required libraries
 library(RPESE)
 
-# Loading data
-data(edhec, package = "PerformanceAnalytics")
-
 # Context of test script
 context("Verify input for functions.")
 
@@ -15,7 +12,7 @@ context("Verify input for functions.")
 test_that("Error for invalid function inputs", {
 
   # Loading data from Performance Analytics
-  data(edhec)
+  data(edhec, package = "PerformanceAnalytics")
   colnames(edhec) = c("CA", "CTAG", "DIS", "EM","EMN", "ED", "FIA",
                       "GM", "LS", "MA", "RV", "SS", "FoF")
 
