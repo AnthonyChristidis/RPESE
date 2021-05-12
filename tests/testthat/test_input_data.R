@@ -5,6 +5,9 @@
 # Required libraries
 library(RPESE)
 
+# Loading data
+data(edhec, package = "PerformanceAnalytics")
+
 # Context of test script
 context("Verify input for functions.")
 

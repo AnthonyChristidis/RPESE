@@ -19,7 +19,9 @@ Imports:
     RPEGLMEN,
     RobStatTM
 Suggests:
-    testthat, R.rsp
+    testthat, 
+    R.rsp,
+    PerformanceAnalytics
 Depends:
 RoxygenNote: 7.0.2
 VignetteBuilder: R.rsp
