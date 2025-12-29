@@ -2,7 +2,7 @@ Package: RPESE
 Type: Package
 Title: Estimates of Standard Errors for Risk and Performance Measures
 Version: 1.2.7
-Date: 2025-12-18
+Date: 2025-12-28
 Authors@R: c(
     person(given = "Anthony",
            family = "Christidis",
